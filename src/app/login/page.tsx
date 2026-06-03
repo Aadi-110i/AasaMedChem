@@ -29,10 +29,15 @@ export default function LoginPage() {
           loop 
           muted 
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity"
+          className="absolute inset-0 w-full h-full object-contain opacity-60 z-10"
         >
           <source src="/videoforlogin.mp4" type="video/mp4" />
         </video>
+        {/* Background blur for the video container to fill gaps */}
+        <div 
+          className="absolute inset-0 bg-slate-900 bg-cover bg-center opacity-30 blur-2xl scale-110"
+          style={{ backgroundImage: 'url("/videoforlogin.mp4")' }} 
+        ></div>
         
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent"></div>
         
