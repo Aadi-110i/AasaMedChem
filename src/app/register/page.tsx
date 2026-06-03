@@ -31,7 +31,7 @@ export default function RegisterPage() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-medical-professional-testing-samples-in-a-lab-41131-large.mp4" type="video/mp4" />
+          <source src="/videoforlogin.mp4" type="video/mp4" />
         </video>
         
         <div className="absolute inset-0 bg-gradient-to-tr from-emerald-600/20 to-transparent"></div>

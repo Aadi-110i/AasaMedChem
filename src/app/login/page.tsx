@@ -31,7 +31,7 @@ export default function LoginPage() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-working-at-a-clean-scientific-laboratory-41130-large.mp4" type="video/mp4" />
+          <source src="/videoforlogin.mp4" type="video/mp4" />
         </video>
         
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent"></div>
