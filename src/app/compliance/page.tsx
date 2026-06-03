@@ -1,60 +1,76 @@
-import { ShieldCheck, FileCheck, Lock, Fingerprint, Eye, ClipboardCheck } from 'lucide-react';
+import { ShieldCheck, FileText, CheckCircle2, Lock, Scale, Leaf } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CompliancePage() {
-  return (
-    <div className="min-h-screen bg-slate-50">
-      <section className="py-24 container mx-auto px-6 text-center">
-        <div className="inline-flex p-4 bg-blue-600 text-white rounded-3xl mb-8 shadow-xl shadow-blue-100">
-          <ShieldCheck size={40} />
-        </div>
-        <h1 className="text-5xl lg:text-7xl font-black text-slate-900 mb-8 tracking-tighter">
-          Trust by <span className="text-blue-600 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Verification.</span>
-        </h1>
-        <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-medium mb-16">
-          Compliance is not a checkbox; it is our architecture. AasaMedChem is built to 
-          satisfy the most stringent laboratory safety and data integrity standards.
-        </p>
+  const certifications = [
+    { title: "ISO 9001:2015", desc: "Quality Management Systems", icon: <CheckCircle2 className="text-blue-500" /> },
+    { title: "cGMP Certified", desc: "Current Good Manufacturing Practice", icon: <ShieldCheck className="text-emerald-500" /> },
+    { title: "REACH Compliant", desc: "EU Chemical Regulation", icon: <Scale className="text-purple-500" /> },
+    { title: "EPA Registered", desc: "Environmental Protection Agency", icon: <Leaf className="text-green-500" /> },
+  ];
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-          {[
-            { icon: <FileCheck />, title: "Full Audit Trails", desc: "Every inventory adjustment and order is timestamped and cryptographically linked to an authorized officer." },
-            { icon: <Fingerprint />, title: "Officer Identity", desc: "Granular verification protocols ensuring that high-value transactions are only executed by certified personnel." },
-            { icon: <Lock />, title: "Data Isolation", desc: "Multi-tenant architecture with high-entropy encryption for sensitive laboratory records and pricing models." },
-            { icon: <ClipboardCheck />, title: "Metric Validation", desc: "Automatic verification of unit conversions to prevent calculation errors in highly sensitive chemical orders." }
-          ].map((item, i) => (
-            <div key={i} className="p-10 bg-white rounded-[40px] border border-slate-100 shadow-sm hover:shadow-2xl transition-all group">
-              <div className="mb-6 text-blue-600 group-hover:scale-110 transition-transform inline-block">
-                {item.icon}
+  return (
+    <div className="min-h-[calc(100vh-80px)] bg-slate-50">
+      {/* Header */}
+      <div className="bg-slate-900 text-white pt-24 pb-32 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+        <div className="absolute top-0 right-0 p-32 bg-emerald-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-400 rounded-full text-xs font-black uppercase tracking-widest mb-6 border border-emerald-500/20">
+            <Lock size={14} /> Zero-Compromise Policy
+          </div>
+          <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tight">Compliance & Safety</h1>
+          <p className="text-xl text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
+            Our platform rigorously adheres to global pharmaceutical and chemical distribution standards. Verification is mandatory.
+          </p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 -mt-20 relative z-20 pb-32 max-w-6xl">
+        
+        {/* Certifications Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {certifications.map((cert, i) => (
+            <div key={i} className="bg-white rounded-[24px] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 transition-transform hover:-translate-y-1">
+              <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-6">
+                {cert.icon}
               </div>
-              <h3 className="text-2xl font-black text-slate-900 mb-4">{item.title}</h3>
-              <p className="text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+              <h3 className="text-lg font-black text-slate-900 mb-2">{cert.title}</h3>
+              <p className="text-sm font-medium text-slate-500">{cert.desc}</p>
             </div>
           ))}
         </div>
-      </section>
 
-      <section className="py-32 bg-white">
-        <div className="container mx-auto px-6 flex flex-col items-center text-center">
-          <h2 className="text-3xl font-black text-slate-900 mb-12">Meets Global Standards</h2>
-          <div className="flex flex-wrap justify-center gap-12 opacity-30 grayscale contrast-200">
-            <div className="text-2xl font-black italic tracking-tighter">GLP_CERT</div>
-            <div className="text-2xl font-black italic tracking-tighter">ISO_9001</div>
-            <div className="text-2xl font-black italic tracking-tighter">HIPAA_SECURE</div>
-            <div className="text-2xl font-black italic tracking-tighter">GDPR_READY</div>
+        {/* SDS Section */}
+        <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl">
+              <FileText size={28} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-slate-900">Safety Data Sheets (SDS)</h2>
+              <p className="text-slate-500 font-medium">Digital repository of material safety protocols</p>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 rounded-2xl p-8 border border-slate-100 text-center">
+            <ShieldCheck size={48} className="text-slate-300 mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Authenticated Access Only</h3>
+            <p className="text-slate-500 font-medium max-w-md mx-auto mb-6">
+              Due to strict regulatory compliance, full Safety Data Sheets (SDS) and material composition reports are only accessible to verified Buyers and Sellers.
+            </p>
+            <div className="flex items-center justify-center gap-4">
+              <Link href="/login" className="px-6 py-3 bg-white border border-slate-200 text-slate-900 font-bold rounded-xl hover:bg-slate-50 transition-colors">
+                Terminal Login
+              </Link>
+              <Link href="/register" className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors">
+                Verify Identity
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
-
-      <section className="py-24 bg-blue-600 text-white text-center">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-black mb-8">Need a specialized audit?</h2>
-          <p className="text-lg font-medium mb-12 opacity-80 max-w-xl mx-auto italic">Our security team can provide custom documentation for institutional requirements.</p>
-          <button className="px-10 py-5 bg-white text-blue-600 rounded-2xl font-black text-lg transition-all hover:bg-slate-50">
-            Download Security Whitepaper
-          </button>
-        </div>
-      </section>
+      </div>
     </div>
   );
 }

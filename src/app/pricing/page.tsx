@@ -1,96 +1,142 @@
-import { CheckCircle2, Coins, Microscope, Building2 } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { Calculator, Zap, Database, ArrowRight } from 'lucide-react';
+import { UnitType, CONVERSIONS, pricePerUnit, formatINRPrecise, getCompatibleUnits } from '@/lib/units';
 import Link from 'next/link';
 
+const MOCK_PRODUCTS = [
+  { id: '1', name: 'Sodium Chloride (High Purity)', basePrice: '0.18', baseUnit: 'GRAM' },
+  { id: '2', name: 'Ethanol 95% (Lab Grade)', basePrice: '0.45', baseUnit: 'MILLILITER' },
+  { id: '3', name: 'Magnesium Sulfate', basePrice: '0.22', baseUnit: 'GRAM' },
+];
+
 export default function PricingPage() {
+  const [selectedProduct, setSelectedProduct] = useState(MOCK_PRODUCTS[0]);
+  const [quantity, setQuantity] = useState('1');
+  const [displayUnit, setDisplayUnit] = useState<UnitType>('kg');
+
+  // Ensure selected unit is compatible when product changes
+  const compatibleUnits = getCompatibleUnits(selectedProduct.baseUnit);
+  if (!compatibleUnits.includes(displayUnit)) {
+    setDisplayUnit(compatibleUnits[0]);
+  }
+
+  // Live calculation
+  const q = parseFloat(quantity) || 0;
+  let unitPriceStr = '0.000000';
+  let totalStr = '0.000000';
+
+  try {
+    const unitPrice = pricePerUnit(selectedProduct.basePrice, displayUnit);
+    unitPriceStr = formatINRPrecise(unitPrice);
+    totalStr = formatINRPrecise(unitPrice.mul(q));
+  } catch (e) {
+    // Math error fallback
+  }
+
   return (
-    <div className="min-h-screen bg-white">
-      <section className="py-24 container mx-auto px-6 text-center">
-        <h1 className="text-5xl lg:text-7xl font-black text-slate-900 mb-8 tracking-tighter">
-          Value Built on <span className="text-blue-600">Precision.</span>
-        </h1>
-        <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-medium mb-16">
-          Transparent, lab-grade pricing designed to scale with your laboratory operations. 
-          From small research nodes to global enterprise labs.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto text-left">
-          {/* Starter */}
-          <div className="p-10 bg-slate-50 rounded-[40px] border border-slate-100 flex flex-col h-full hover:bg-white hover:shadow-2xl transition-all">
-            <div className="mb-8">
-              <div className="p-3 bg-white inline-flex rounded-2xl shadow-sm text-slate-400 mb-6"><Microscope size={24} /></div>
-              <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Research Node</h3>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-4xl font-black text-slate-900">₹0</span>
-                <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">Free Forever</span>
-              </div>
-              <p className="text-slate-500 text-sm font-medium leading-relaxed">Perfect for independent researchers and small lab setups.</p>
-            </div>
-            <ul className="space-y-4 mb-12">
-              {["Single Lab Node", "Up to 100 SKUs", "Standard Audit Logs", "8-Decimal Precision"].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-sm font-bold text-slate-600">
-                  <CheckCircle2 size={16} className="text-emerald-500" /> {item}
-                </li>
-              ))}
-            </ul>
-            <Link href="/register" className="mt-auto w-full py-4 bg-slate-900 text-white text-center rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-slate-800 transition-colors">
-              Establish Access
-            </Link>
+    <div className="min-h-[calc(100vh-80px)] bg-slate-50">
+      {/* Hero Section */}
+      <div className="bg-slate-900 text-white pt-24 pb-32 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div className="absolute top-0 right-0 p-32 bg-blue-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 text-blue-400 rounded-full text-xs font-black uppercase tracking-widest mb-6 border border-blue-500/20">
+            <Calculator size={14} /> 6-Decimal Precision
           </div>
-
-          {/* Professional */}
-          <div className="p-10 bg-blue-600 rounded-[40px] text-white flex flex-col h-full shadow-2xl shadow-blue-200 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-8 bg-white/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="mb-8">
-              <div className="p-3 bg-white/10 backdrop-blur-md inline-flex rounded-2xl mb-6 text-white"><Coins size={24} /></div>
-              <h3 className="text-2xl font-black mb-2 tracking-tight">Production Lab</h3>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-4xl font-black text-white">₹4,999</span>
-                <span className="text-white/60 font-bold uppercase text-[10px] tracking-widest">/ Node / MO</span>
-              </div>
-              <p className="text-white/80 text-sm font-medium leading-relaxed">Engineered for high-volume supply chains and established labs.</p>
-            </div>
-            <ul className="space-y-4 mb-12">
-              {["Unlimited Inventory", "Advanced Multi-Node Sync", "Real-time Stock Locks", "API Protocol Access", "Priority Compliance Support"].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-sm font-bold text-white">
-                  <CheckCircle2 size={16} className="text-white/40" /> {item}
-                </li>
-              ))}
-            </ul>
-            <Link href="/register" className="mt-auto w-full py-4 bg-white text-blue-600 text-center rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-slate-50 transition-colors">
-              Request Trial
-            </Link>
-          </div>
-
-          {/* Enterprise */}
-          <div className="p-10 bg-slate-900 rounded-[40px] text-white flex flex-col h-full hover:shadow-2xl transition-all">
-            <div className="mb-8">
-              <div className="p-3 bg-white/5 inline-flex rounded-2xl mb-6 text-slate-400"><Building2 size={24} /></div>
-              <h3 className="text-2xl font-black mb-2 tracking-tight">Global Grid</h3>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-4xl font-black">Custom</span>
-              </div>
-              <p className="text-slate-400 text-sm font-medium leading-relaxed">Dedicated infrastructure for multinational pharmaceutical networks.</p>
-            </div>
-            <ul className="space-y-4 mb-12">
-              {["Custom Data Governance", "White-label Portal", "24/7 Security Ops", "On-premise Deployment", "Custom Compliance Audits"].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-sm font-bold text-slate-300">
-                  <CheckCircle2 size={16} className="text-blue-500" /> {item}
-                </li>
-              ))}
-            </ul>
-            <button className="mt-auto w-full py-4 border-2 border-white/10 text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-white/5 transition-colors">
-              Contact Root Admins
-            </button>
-          </div>
+          <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tight">Interactive Quotation Engine</h1>
+          <p className="text-xl text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
+            Experience our zero-rounding-error architecture. Switch units dynamically and see exact financial calculations in real-time.
+          </p>
         </div>
-      </section>
+      </div>
 
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-slate-400 font-bold uppercase text-xs tracking-[0.3em] mb-4">No hidden protocols.</p>
-          <p className="text-slate-500 max-w-xl mx-auto font-medium">All pricing includes standard end-to-end encryption and automatic version updates across the AasaMedChem network.</p>
+      {/* Interactive Calculator Section */}
+      <div className="container mx-auto px-6 -mt-20 relative z-20 pb-32">
+        <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100 max-w-4xl mx-auto">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Controls */}
+            <div className="space-y-6">
+              <div>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1 block mb-2">Select Target Compound</label>
+                <div className="grid gap-3">
+                  {MOCK_PRODUCTS.map(p => (
+                    <button
+                      key={p.id}
+                      onClick={() => setSelectedProduct(p)}
+                      className={`text-left px-5 py-4 rounded-2xl border transition-all ${
+                        selectedProduct.id === p.id 
+                          ? 'border-blue-500 bg-blue-50 ring-4 ring-blue-500/10' 
+                          : 'border-slate-100 bg-slate-50 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className={`font-bold ${selectedProduct.id === p.id ? 'text-blue-700' : 'text-slate-900'}`}>{p.name}</div>
+                      <div className="text-xs font-medium text-slate-500 mt-1">Base: {formatINRPrecise(p.basePrice)} / {p.baseUnit.toLowerCase()}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1 block mb-2">Volume / Mass Requirement</label>
+                <div className="flex gap-3">
+                  <input 
+                    type="number" 
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    min="0.1" step="0.1"
+                    className="flex-1 px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-medium text-slate-900 text-lg" 
+                  />
+                  <select 
+                    value={displayUnit}
+                    onChange={(e) => setDisplayUnit(e.target.value as UnitType)}
+                    className="w-32 px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-900 appearance-none text-center cursor-pointer"
+                  >
+                    {compatibleUnits.map(u => (
+                      <option key={u} value={u}>{u}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Results Output */}
+            <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden flex flex-col justify-center">
+              <div className="absolute top-0 right-0 p-16 bg-emerald-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+              
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-8 pb-8 border-b border-white/10">
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Calculated Unit Price</div>
+                    <div className="font-mono text-xl text-emerald-400">{unitPriceStr} <span className="text-slate-500 text-sm">/ {displayUnit}</span></div>
+                  </div>
+                  <Database className="text-slate-600" size={24} />
+                </div>
+
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-emerald-400/80 mb-2 flex items-center gap-2">
+                    <Zap size={12} className="text-emerald-400" /> Exact Final Output
+                  </div>
+                  <div className="text-4xl md:text-5xl font-black font-mono tracking-tight text-white mb-2" style={{ textShadow: '0 4px 20px rgba(16, 185, 129, 0.4)' }}>
+                    {totalStr}
+                  </div>
+                  <div className="text-xs font-medium text-slate-400">Guaranteed to 6 decimal places. No floating-point errors.</div>
+                </div>
+
+                <div className="mt-8 pt-8 border-t border-white/10">
+                  <Link href="/register" className="inline-flex items-center justify-center gap-2 w-full py-4 bg-white hover:bg-slate-100 text-slate-900 rounded-xl font-black transition-colors group">
+                    Create Terminal ID <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </section>
+      </div>
     </div>
   );
 }
