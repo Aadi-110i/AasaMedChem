@@ -73,80 +73,95 @@ export default function OrderForm({ products }: { products: Product[] }) {
     setLoading(false);
   };
 
-  if (products.length === 0) return <div className="mono" style={{ color: 'var(--text-dim)' }}>SYSTEM_ERR: NO_INVENTORY_DETECTED</div>;
+  if (products.length === 0) return (
+    <div className="p-10 text-center bg-slate-50 border border-dashed border-slate-200 rounded-[32px]">
+      <div className="text-slate-300 font-black uppercase tracking-widest text-xs">ERR: NO_INVENTORY_DETECTED</div>
+    </div>
+  );
 
   return (
-    <form onSubmit={handleSubmit} className="card flex flex-col gap-6" style={{ background: 'rgba(255,255,255,0.01)', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: 0, right: 0, padding: '1rem', opacity: 0.2 }}>
-        <Cpu size={64} style={{ color: 'var(--accent-cyan)' }} />
+    <form onSubmit={handleSubmit} className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-2xl shadow-slate-200/50 space-y-8 relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+        <Cpu size={120} />
       </div>
 
-      <div className="flex items-center gap-3" style={{ marginBottom: '1rem' }}>
-        <Target size={18} style={{ color: 'var(--accent-cyan)' }} />
-        <h3 className="mono" style={{ fontSize: '0.8rem', textTransform: 'uppercase' }}>Quotation_Input_Matrix</h3>
+      <div className="flex items-center gap-3">
+        <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+          <Target size={18} />
+        </div>
+        <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400">Metric Input Matrix</h3>
       </div>
       
       {message && (
-        <div className={`mono badge badge-${message.type === 'success' ? 'approved' : 'pending'}`} 
-             style={{ width: '100%', textAlign: 'center', padding: '0.75rem', borderRadius: '0.5rem' }}>
+        <div className={`p-4 rounded-2xl text-xs font-black uppercase tracking-widest text-center ${
+          message.type === 'success' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'
+        }`}>
           {message.text}
         </div>
       )}
 
-      <div>
-        <label className="label">Target_Subject</label>
-        <select 
-          className="input" 
-          value={selectedProductId} 
-          onChange={(e) => handleProductChange(e.target.value)}
-          required
-          style={{ width: '100%' }}
-        >
-          {products.map(p => (
-            <option key={p.id} value={p.id}>{p.name} (AVAIL: {p.stock.toString()})</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex gap-4">
-        <div style={{ flex: 2 }}>
-          <label className="label">Quantity_Mass</label>
-          <input 
-            type="number" 
-            className="input" 
-            value={quantity} 
-            onChange={(e) => setQuantity(e.target.value)}
-            step="0.00000001"
-            min="0"
-            required 
-            placeholder="0.00"
-          />
-        </div>
-        <div style={{ flex: 1 }}>
-          <label className="label">Metric_ID</label>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 text-nowrap">Target Subject</label>
           <select 
-            className="input" 
-            value={unit} 
-            onChange={(e) => setUnit(e.target.value as UnitType)}
+            className="w-full px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-900 appearance-none"
+            value={selectedProductId} 
+            onChange={(e) => handleProductChange(e.target.value)}
             required
           >
-            {availableUnits.map(u => (
-              <option key={u} value={u}>{u}</option>
+            {products.map(p => (
+              <option key={p.id} value={p.id}>{p.name} (AVAIL: {p.stock.toString()})</option>
             ))}
           </select>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-4" style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(0, 245, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-        <div className="flex justify-between items-center">
-          <span className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>ESTIMATED_VALUATION</span>
-          <div className="mono" style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--accent-cyan)' }}>
-            {formatINR(calculatedPrice.toString())}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 text-nowrap">Quantity Mass</label>
+            <input 
+              type="number" 
+              className="w-full px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" 
+              value={quantity} 
+              onChange={(e) => setQuantity(e.target.value)}
+              step="0.00000001"
+              min="0"
+              required 
+              placeholder="0.00"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 text-nowrap">Metric ID</label>
+            <select 
+              className="w-full px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-900 appearance-none"
+              value={unit} 
+              onChange={(e) => setUnit(e.target.value as UnitType)}
+              required
+            >
+              {availableUnits.map(u => (
+                <option key={u} value={u}>{u.toUpperCase()}</option>
+              ))}
+            </select>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={loading || !quantity || Number(quantity) <= 0}>
-          {loading ? 'PROCESSING_LOGIC...' : 'Execute_Order'}
-          {!loading && <ChevronRight size={16} />}
+      </div>
+
+      <div className="pt-6 border-t border-slate-50 flex flex-col gap-4">
+        <div className="flex justify-between items-end px-1">
+          <div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-slate-300 mb-1">Net valuation</div>
+            <div className="text-3xl font-black text-slate-900 tracking-tighter">
+              {formatINR(calculatedPrice.toString())}
+            </div>
+          </div>
+        </div>
+        
+        <button 
+          type="submit" 
+          className="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-100 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:bg-slate-300 disabled:shadow-none" 
+          disabled={loading || !quantity || Number(quantity) <= 0}
+        >
+          {loading ? 'Executing...' : 'Establish Order'}
+          {!loading && <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />}
         </button>
       </div>
     </form>

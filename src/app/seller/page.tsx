@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { getAuth } from '@/lib/auth';
 import OrderForm from '@/components/OrderForm';
 import { formatINR } from '@/lib/units';
-import { Terminal, Activity, History } from 'lucide-react';
+import { ShoppingCart, ClipboardList, Clock, Activity, Target } from 'lucide-react';
 
 export default async function SellerDashboard() {
   const auth = await getAuth();
@@ -18,71 +18,94 @@ export default async function SellerDashboard() {
   });
 
   return (
-    <div className="container py-16">
-      <header style={{ marginBottom: '5rem' }}>
-        <div className="flex items-center gap-3 mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem', fontSize: '0.8rem' }}>
-          <Terminal size={16} />
-          <span>Session_Active: Sales_Officer</span>
-        </div>
-        <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>Operator Node</h1>
-        <p style={{ color: 'var(--text-secondary)', maxWidth: '600px' }}>
-          Execute high-precision chemical quotations. Interface with live inventory 
-          protocols and monitor your transaction pipeline.
-        </p>
-      </header>
-
-      <div className="flex flex-col lg-flex-row gap-16">
-        <div style={{ flex: 1 }}>
-          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
-            <Activity size={24} style={{ color: 'var(--accent-cyan)' }} />
-            <h2 style={{ fontSize: '1.75rem' }}>Quotation_Forge</h2>
+    <div className="min-h-screen bg-slate-50/50 pt-10 pb-20">
+      <div className="container mx-auto px-6">
+        <header className="mb-12">
+          <div className="flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-[0.2em] mb-3">
+            <Activity size={14} /> Operational Node Active
           </div>
-          <OrderForm products={products} />
-        </div>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Sales Dashboard</h1>
+          <p className="text-slate-500 font-medium">Generate precise chemical quotations and monitor your pipeline.</p>
+        </header>
 
-        <div style={{ flex: 1 }}>
-          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
-            <History size={24} style={{ color: 'var(--accent-cyan)' }} />
-            <h2 style={{ fontSize: '1.75rem' }}>Personal_Ledger</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Left Column: Quotation Form */}
+          <div className="lg:col-span-5">
+            <div className="sticky top-28">
+              <div className="flex items-center gap-3 mb-6">
+                <ShoppingCart size={20} className="text-slate-400" />
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Initialize New Quotation</h2>
+              </div>
+              <OrderForm products={products} />
+              
+              <div className="mt-8 p-6 bg-blue-600 rounded-[32px] text-white relative overflow-hidden shadow-xl shadow-blue-200">
+                <div className="absolute top-0 right-0 p-10 bg-white/20 rounded-full blur-[60px] pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] mb-4 opacity-80">
+                    <Target size={14} /> Efficiency Protocol
+                  </div>
+                  <h3 className="text-xl font-black mb-2">Precision is Profit.</h3>
+                  <p className="text-sm font-medium opacity-80 leading-relaxed">Ensure all metrics are verified before executing the quotation protocol.</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="card" style={{ padding: '0', background: 'transparent', border: 'none' }}>
-            <div style={{ overflowX: 'auto' }}>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Ref_Hash</th>
-                    <th>Spec_ID</th>
-                    <th>Net_Valuation</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {myOrders.map(o => (
-                    <tr key={o.id}>
-                      <td className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>#{o.id.slice(-8).toUpperCase()}</td>
-                      <td>
-                        <div style={{ fontWeight: '700', color: 'white' }}>{o.items[0]?.product.name}</div>
-                        <div className="mono" style={{ fontSize: '0.65rem', color: 'var(--accent-cyan)' }}>
-                          {o.items[0]?.displayQuantity.toString()} {o.items[0]?.displayUnit.toUpperCase()}
-                        </div>
-                      </td>
-                      <td className="mono" style={{ fontWeight: '700' }}>{formatINR(o.totalAmount.toString())}</td>
-                      <td>
-                        <span className={`badge badge-${o.status.toLowerCase()}`}>
-                          {o.status}
-                        </span>
-                      </td>
+
+          {/* Right Column: History */}
+          <div className="lg:col-span-7">
+            <div className="flex items-center gap-3 mb-6">
+              <ClipboardList size={20} className="text-slate-400" />
+              <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Personal Transaction Ledger</h2>
+            </div>
+            
+            <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50/50">
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Ref</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Specification</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Valuation</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
                     </tr>
-                  ))}
-                  {myOrders.length === 0 && (
-                    <tr>
-                      <td colSpan={4} style={{ textAlign: 'center', padding: '5rem' }}>
-                        <div className="mono" style={{ color: 'var(--text-dim)' }}>ZERO_ACTIVITY_HISTORY</div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-50">
+                    {myOrders.map(o => (
+                      <tr key={o.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-8 py-6">
+                          <div className="font-mono text-[10px] font-bold text-slate-400 uppercase">#{o.id.slice(-8).toUpperCase()}</div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <div className="font-black text-slate-900">{o.items[0]?.product.name}</div>
+                          <div className="text-[10px] font-bold text-slate-400 uppercase mt-1">
+                            {o.items[0]?.displayQuantity.toString()} {o.items[0]?.displayUnit}
+                          </div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <div className="font-bold text-slate-900">{formatINR(o.totalAmount.toString())}</div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                            o.status === 'PENDING' ? 'bg-amber-50 text-amber-600' : 
+                            o.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-600' : 
+                            'bg-blue-50 text-blue-600'
+                          }`}>{o.status}</span>
+                        </td>
+                      </tr>
+                    ))}
+                    {myOrders.length === 0 && (
+                      <tr>
+                        <td colSpan={4} style={{ textAlign: 'center', padding: '100px' }}>
+                          <div className="flex flex-col items-center">
+                            <Clock size={40} className="text-slate-200 mb-4" />
+                            <div className="text-sm font-black text-slate-300 uppercase tracking-widest">No transactions detected</div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

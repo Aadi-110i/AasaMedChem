@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { createProduct, deleteProduct } from '@/app/actions/products';
 import { formatINR } from '@/lib/units';
-import { Database, Box, History, Trash2, PlusCircle } from 'lucide-react';
+import { Database, Box, History, Trash2, PlusCircle, AlertCircle, TrendingUp, Users } from 'lucide-react';
 
 export default async function AdminDashboard() {
   const products = await prisma.product.findMany({
@@ -14,160 +14,184 @@ export default async function AdminDashboard() {
   });
 
   return (
-    <div className="container py-16">
-      <header style={{ marginBottom: '5rem' }}>
-        <div className="mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem', fontSize: '0.8rem' }}>Root_Privileges: Active</div>
-        <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>Central Control</h1>
-        <p style={{ color: 'var(--text-secondary)', maxWidth: '600px' }}>
-          Global inventory oversight and real-time transaction monitoring. 
-          Modify lab-wide product parameters and verify order integrity.
-        </p>
-      </header>
-
-      <div className="flex flex-col gap-16">
-        {/* Product Management Section */}
-        <section>
-          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
-            <Database size={24} style={{ color: 'var(--accent-cyan)' }} />
-            <h2 style={{ fontSize: '1.75rem' }}>Inventory_Registry</h2>
+    <div className="min-h-screen bg-slate-50/50 pt-10 pb-20">
+      <div className="container mx-auto px-6">
+        <header className="mb-12">
+          <div className="flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-[0.2em] mb-3">
+            <AlertCircle size={14} /> System Root Access
           </div>
-          
-          <div className="card" style={{ marginBottom: '4rem', background: 'rgba(255,255,255,0.01)' }}>
-            <div className="flex items-center gap-3" style={{ marginBottom: '2.5rem' }}>
-              <PlusCircle size={20} style={{ color: 'var(--accent-cyan)' }} />
-              <h3 className="mono" style={{ fontSize: '0.9rem', textTransform: 'uppercase' }}>Initialize_New_Product</h3>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Central Operations</h1>
+          <p className="text-slate-500 font-medium">Global inventory and transaction oversight node.</p>
+        </header>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white p-8 rounded-[24px] border border-slate-100 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><Box size={24} /></div>
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Stock</span>
             </div>
-            
-            <form action={async (d) => { await createProduct(d); }} className="flex flex-col gap-8">
-              <div className="flex md-flex-row gap-8">
-                <div style={{ flex: 3 }}>
-                  <label className="label">Entry_Name</label>
-                  <input type="text" name="name" className="input" required placeholder="NACL_99_PERCENT" />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <label className="label">Metric_Base</label>
-                  <select name="baseUnit" className="input">
-                    <option value="GRAM">Mass (g)</option>
-                    <option value="MILLILITER">Volume (ml)</option>
-                    <option value="COUNT">Unit (count)</option>
-                  </select>
+            <div className="text-3xl font-black text-slate-900">{products.length}</div>
+            <p className="text-xs text-slate-400 font-bold mt-1 uppercase">Tracked Batch Units</p>
+          </div>
+          <div className="bg-white p-8 rounded-[24px] border border-slate-100 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><TrendingUp size={24} /></div>
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Volume</span>
+            </div>
+            <div className="text-3xl font-black text-slate-900">{orders.length}</div>
+            <p className="text-xs text-slate-400 font-bold mt-1 uppercase">Processed Transactions</p>
+          </div>
+          <div className="bg-white p-8 rounded-[24px] border border-slate-100 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><Users size={24} /></div>
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Personnel</span>
+            </div>
+            <div className="text-3xl font-black text-slate-900">Active</div>
+            <p className="text-xs text-slate-400 font-bold mt-1 uppercase">Operational Nodes</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-12">
+          {/* Left Column: Form */}
+          <div className="xl:col-span-1">
+            <div className="sticky top-28">
+              <div className="bg-slate-900 rounded-[32px] p-8 text-white shadow-2xl shadow-slate-200 overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-10 bg-blue-500 rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-8">
+                    <PlusCircle size={20} className="text-blue-400" />
+                    <h2 className="text-lg font-black uppercase tracking-widest">Initialize Entry</h2>
+                  </div>
+                  
+                  <form action={async (d) => { await createProduct(d); }} className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Designation</label>
+                      <input type="text" name="name" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white placeholder:text-white/20" required placeholder="NACL_LAB_GRADE" />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Metric</label>
+                        <select name="baseUnit" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white appearance-none">
+                          <option value="GRAM">GRAM (g)</option>
+                          <option value="MILLILITER">ML (ml)</option>
+                          <option value="COUNT">ITEM (cnt)</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Rate (INR)</label>
+                        <input type="number" name="basePrice" step="0.00000001" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white" required placeholder="0.00" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Initial Load</label>
+                      <input type="number" name="stock" step="0.00000001" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white" required placeholder="0.00" />
+                    </div>
+
+                    <button type="submit" className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-900/20">
+                      Commit to Registry
+                    </button>
+                  </form>
                 </div>
               </div>
-              <div className="flex md-flex-row gap-8">
-                <div style={{ flex: 1 }}>
-                  <label className="label">Valuation_Rate (INR)</label>
-                  <input type="number" name="basePrice" step="0.00000001" className="input" required placeholder="0.00000000" />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <label className="label">Initial_Load (Metric)</label>
-                  <input type="number" name="stock" step="0.00000001" className="input" required placeholder="0.00000000" />
-                </div>
-              </div>
-              <div>
-                <label className="label">Technical_Notes</label>
-                <textarea name="description" className="input" rows={3} placeholder="Standard storage requirements..."></textarea>
-              </div>
-              <button type="submit" className="btn btn-primary" style={{ alignSelf: 'flex-start' }}>
-                Commit Entry
-              </button>
-            </form>
+            </div>
           </div>
 
-          <div className="card" style={{ padding: '0', background: 'transparent', border: 'none' }}>
-            <div className="flex items-center gap-3" style={{ marginBottom: '2rem' }}>
-              <Box size={20} style={{ color: 'var(--accent-cyan)' }} />
-              <h3 className="mono" style={{ fontSize: '0.9rem', textTransform: 'uppercase' }}>Live_Stock_Status</h3>
-            </div>
-            <div style={{ overflowX: 'auto' }}>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Designation</th>
-                    <th>Class</th>
-                    <th>Valuation</th>
-                    <th>Metric_Status</th>
-                    <th style={{ textAlign: 'right' }}>Ops</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((p) => (
-                    <tr key={p.id}>
-                      <td style={{ fontWeight: '700', color: 'white' }}>{p.name}</td>
-                      <td className="mono" style={{ fontSize: '0.7rem' }}>{p.baseUnit}</td>
-                      <td className="mono" style={{ color: 'var(--accent-cyan)' }}>{formatINR(p.basePrice.toString())}</td>
-                      <td>
-                        <div className="flex items-center gap-3">
-                          <span className="mono" style={{ fontWeight: '700' }}>{p.stock.toString()}</span>
-                          <div style={{ flex: 1, height: '2px', background: 'rgba(255,255,255,0.05)', position: 'relative', minWidth: '80px' }}>
-                            <div style={{ position: 'absolute', height: '100%', background: 'var(--accent-cyan)', width: '60%' }}></div>
-                          </div>
-                        </div>
-                      </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <form action={async () => { await deleteProduct(p.id); }}>
-                          <button type="submit" className="op-btn delete">
-                            <Trash2 size={16} />
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+          {/* Right Column: Tables */}
+          <div className="xl:col-span-2 space-y-12">
+            <section>
+              <div className="flex items-center gap-4 mb-6">
+                <Database size={20} className="text-slate-400" />
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Active Inventory Registry</h2>
+              </div>
+              <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50/50">
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Designation</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Class</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Valuation</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Ops</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {products.map((p) => (
+                        <tr key={p.id} className="hover:bg-slate-50/50 transition-colors group">
+                          <td className="px-8 py-6">
+                            <div className="font-black text-slate-900">{p.name}</div>
+                            <div className="text-[10px] font-bold text-slate-300 font-mono mt-1">ID: {p.id.slice(-8).toUpperCase()}</div>
+                          </td>
+                          <td className="px-8 py-6 text-center">
+                            <span className="px-3 py-1 bg-slate-100 rounded-full text-[10px] font-black text-slate-500">{p.baseUnit}</span>
+                          </td>
+                          <td className="px-8 py-6">
+                            <div className="font-bold text-blue-600">{formatINR(p.basePrice.toString())}</div>
+                            <div className="text-[10px] font-bold text-slate-400 uppercase mt-1">Stock: {p.stock.toString()}</div>
+                          </td>
+                          <td className="px-8 py-6 text-right">
+                            <form action={async () => { await deleteProduct(p.id); }}>
+                              <button type="submit" className="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                                <Trash2 size={18} />
+                              </button>
+                            </form>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
 
-        {/* Transaction History */}
-        <section>
-          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
-            <History size={24} style={{ color: 'var(--accent-cyan)' }} />
-            <h2 style={{ fontSize: '1.75rem' }}>Order_Logs</h2>
+            <section>
+              <div className="flex items-center gap-4 mb-6">
+                <History size={20} className="text-slate-400" />
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">Recent Operational Logs</h2>
+              </div>
+              <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50/50">
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Ref Hash</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Personnel</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Spec</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {orders.map((o) => (
+                        <tr key={o.id} className="hover:bg-slate-50/50 transition-colors">
+                          <td className="px-8 py-6 font-mono text-[10px] font-bold text-slate-400">#{o.id.toUpperCase()}</td>
+                          <td className="px-8 py-6">
+                            <div className="text-xs font-bold text-slate-900">{o.user.email}</div>
+                          </td>
+                          <td className="px-8 py-6">
+                            {o.items.map(item => (
+                              <div key={item.id} className="text-xs font-bold text-slate-500">
+                                {item.product.name} ({item.displayQuantity.toString()} {item.displayUnit})
+                              </div>
+                            ))}
+                          </td>
+                          <td className="px-8 py-6">
+                            <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                              o.status === 'PENDING' ? 'bg-amber-50 text-amber-600' : 
+                              o.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-600' : 
+                              'bg-blue-50 text-blue-600'
+                            }`}>{o.status}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
           </div>
-          <div className="card" style={{ padding: '0', background: 'transparent', border: 'none' }}>
-            <div style={{ overflowX: 'auto' }}>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Hash</th>
-                    <th>Origin_Node</th>
-                    <th>Specifications</th>
-                    <th>Net_Valuation</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((o) => (
-                    <tr key={o.id}>
-                      <td className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>{o.id.toUpperCase()}</td>
-                      <td className="mono" style={{ fontSize: '0.7rem' }}>{o.user.email}</td>
-                      <td style={{ fontSize: '0.875rem' }}>
-                        {o.items.map(item => (
-                          <div key={item.id}>
-                            {item.product.name} ({item.displayQuantity.toString()} {item.displayUnit})
-                          </div>
-                        ))}
-                      </td>
-                      <td className="mono" style={{ color: 'var(--accent-cyan)', fontWeight: '700' }}>{formatINR(o.totalAmount.toString())}</td>
-                      <td>
-                        <span className={`badge badge-${o.status.toLowerCase()}`}>
-                          {o.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                  {orders.length === 0 && (
-                    <tr>
-                      <td colSpan={5} style={{ textAlign: 'center', padding: '5rem' }}>
-                        <div className="mono" style={{ color: 'var(--text-dim)' }}>ZERO_TRANSACTIONS_RECORDED</div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
     </div>
   );

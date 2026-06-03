@@ -1,50 +1,89 @@
+'use client';
+
 import { register } from '@/app/actions/auth';
 import Link from 'next/link';
-import { UserPlus, Shield, ChevronRight } from 'lucide-react';
+import { UserPlus, Shield, ChevronRight, ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
 
 export default function RegisterPage() {
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (formData: FormData) => {
+    const res = await register(formData);
+    if (res?.error) {
+      setError(res.error);
+    }
+  };
+
   return (
-    <div className="container flex items-center justify-center" style={{ minHeight: '90vh' }}>
-      <div className="card" style={{ width: '100%', maxWidth: '440px', background: 'rgba(255,255,255,0.01)' }}>
-        <div className="flex flex-col items-center text-center" style={{ marginBottom: '3rem' }}>
-          <div style={{ padding: '1rem', background: 'var(--accent-dim)', borderRadius: '1rem', marginBottom: '1.5rem', color: 'var(--accent-cyan)' }}>
-            <UserPlus size={32} />
-          </div>
-          <h1 style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>ID Registration</h1>
-          <p className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-            New_Entry_Request
-          </p>
-        </div>
-
-        <form action={async (d) => { await register(d); }} className="flex flex-col gap-6">
-          <div>
-            <label className="label">Primary_Identifier</label>
-            <input type="email" name="email" className="input" required placeholder="OFFICER_EMAIL" style={{ width: '100%' }} />
-          </div>
-          <div>
-            <label className="label">Cipher_Code</label>
-            <input type="password" name="password" className="input" required placeholder="••••••••" style={{ width: '100%' }} />
-          </div>
-          <div>
-            <label className="label">Assigned_Protocol</label>
-            <div style={{ position: 'relative' }}>
-              <select name="role" className="input" style={{ width: '100%' }}>
-                <option value="SELLER">Sales_Officer_Level_1</option>
-                <option value="ADMIN">System_Administrator_Root</option>
-              </select>
-              <Shield size={16} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none' }} />
+    <div className="min-h-[calc(100vh-80px)] bg-slate-50 flex items-center justify-center p-6">
+      <div className="w-full max-w-[480px]">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-900 transition-colors mb-8 group">
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back home
+        </Link>
+        
+        <div className="bg-white rounded-[32px] p-10 shadow-2xl shadow-slate-200 border border-slate-100">
+          <div className="text-center mb-10">
+            <div className="inline-flex p-4 bg-emerald-50 text-emerald-600 rounded-2xl mb-6">
+              <UserPlus size={32} />
             </div>
+            <h1 className="text-3xl font-black text-slate-900 mb-2">ID Registration</h1>
+            <p className="text-slate-400 font-medium">Create your official laboratory credentials</p>
           </div>
-          
-          <button type="submit" className="btn btn-primary" style={{ marginTop: '1rem', justifyContent: 'center' }}>
-            Establish_Identity <ChevronRight size={16} />
-          </button>
-        </form>
 
-        <div style={{ marginTop: '2.5rem', paddingTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
-          <p className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-            ALREADY_REGISTERED? <Link href="/login" style={{ color: 'var(--accent-cyan)', marginLeft: '0.5rem' }}>TERMINAL_LOGIN</Link>
-          </p>
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 text-red-600 text-xs font-black uppercase tracking-widest rounded-xl border border-red-100 text-center">
+              {error}
+            </div>
+          )}
+
+          <form action={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Email Identifier</label>
+              <input 
+                type="email" 
+                name="email" 
+                className="w-full px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300" 
+                required 
+                placeholder="officer@aasa.lab" 
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Secure Cipher</label>
+              <input 
+                type="password" 
+                name="password" 
+                className="w-full px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300" 
+                required 
+                placeholder="••••••••" 
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Assigned Role</label>
+              <div className="relative">
+                <select 
+                  name="role" 
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 focus:border-blue-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-900 appearance-none"
+                >
+                  <option value="SELLER">Sales Officer (Ops)</option>
+                  <option value="ADMIN">System Administrator (Root)</option>
+                </select>
+                <Shield size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+              </div>
+            </div>
+            
+            <button type="submit" className="w-full py-5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black text-lg shadow-xl shadow-slate-100 transition-all flex items-center justify-center gap-2 group mt-6">
+              Establish Identity <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </form>
+
+          <div className="mt-10 pt-8 border-t border-slate-50 text-center">
+            <p className="text-sm text-slate-400 font-bold uppercase tracking-tight">
+              Already have an ID? <Link href="/login" className="text-blue-600 hover:text-blue-700 underline underline-offset-4 ml-1">Terminal Login</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
