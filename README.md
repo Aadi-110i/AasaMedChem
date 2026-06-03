@@ -1,91 +1,96 @@
-# AasaMedChem Inventory and Order Management System
+# 🔬 AasaMedChem – Precision Chemical Trading Platform
 
-A robust, high-precision inventory and order management system designed for the chemical and medical industry. Built with Next.js, Neon PostgreSQL, and Prisma.
+![Next.js](https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma)
+![Neon](https://img.shields.io/badge/Neon-PostgreSQL-00E599?style=for-the-badge&logo=postgresql)
 
-## 🚀 Live Demo
-[Link to your Vercel deployment would go here]
+**AasaMedChem** is a full-stack, enterprise-grade B2B platform designed for precision chemical trading. Built with a monolithic architecture on Next.js, it solves the complex problem of dynamic, high-precision unit conversions and rigorous role-based access control (RBAC) required in the pharmaceutical and chemical supply chain.
 
-## ✨ Features
-- **Role-Based Access Control:** Separate dashboards for **Admin** (inventory management, order oversight) and **Seller** (quotation creation, order tracking).
-- **Dynamic Unit Conversion:** Seamlessly handle orders in `g`, `kg`, `mL`, `L`, or `item` units regardless of how items are stored.
-- **High-Precision Pricing:** Financial calculations handled with `Decimal.js` to ensure 8-decimal precision for chemical weights and INR amounts.
-- **Inventory Tracking:** Real-time stock updates with automated deductions upon order placement.
-- **Medical UI Theme:** A clean, professional interface built with custom Vanilla CSS.
+---
 
-## 🛠️ Tech Stack
-- **Frontend:** Next.js 15 (App Router), Vanilla CSS, TypeScript.
-- **Backend:** Next.js Server Actions, Custom JWT Authentication.
-- **Database:** Neon PostgreSQL.
-- **ORM:** Prisma.
-- **Utilities:** `decimal.js` for math, `jose` for middleware auth.
+## ✨ Key Features
 
-## 📐 System Architecture
-The application uses a **Server-First** approach. Most logic resides in Server Actions to ensure security and direct database interaction. Middleware handles route protection by verifying JWT tokens stored in HTTP-only cookies.
+### 🧮 High-Precision Scientific Conversions
+- **Dynamic Unit Switching:** Buyers can order chemicals in any preferred unit (e.g., `grams`, `kilograms`, `milliliters`, `liters`, `items`).
+- **Zero Rounding Errors:** Implemented `decimal.js` alongside PostgreSQL `NUMERIC(20,6)` to guarantee exact precision up to 6 decimal places across all financial and inventory calculations.
+- **Base Unit Architecture:** The database exclusively stores stock and pricing in predefined "Base Units", while the presentation layer handles fluid, on-the-fly conversions.
 
-### Unit Storage & Conversion Strategy
-To ensure maximum data integrity and prevent rounding errors, we use a **Base Unit Storage** strategy:
+### 🛡️ Edge-Protected RBAC (Role-Based Access Control)
+- **Three-Tier Architecture:** Complete separation of concerns between `ADMIN` (inventory/order management), `SELLER` (chemical listings/requests), and `BUYER` (purchasing and ledger tracking).
+- **Custom JWT Authentication:** Stateless, HTTP-only JWT cookies verified at the Next.js Edge Middleware layer (`jose` library) to prevent unauthorized access before the page even renders.
 
-1. **Internal Storage:**
-   - All weights are stored in **Grams (g)**.
-   - All volumes are stored in **Milliliters (mL)**.
-   - Individual counts are stored as **Items**.
-2. **Pricing:**
-   - Prices (`basePrice`) are stored as the rate **per base unit** (e.g., price per 1 gram).
-3. **Conversion Logic:**
-   - Conversion factors (e.g., 1000 for kg/g) are applied in the `src/lib/units.ts` utility.
-   - **Order Placement:** When a user orders `2 kg`, the system converts this to `2000 g`, verifies stock against the gram-based inventory, and calculates `2000 * basePrice`.
-   - **Consistency:** All calculations are performed using the `Decimal` type both in the database (PostgreSQL `Decimal(20, 8)`) and the application layer.
+### 🎨 Premium UI/UX Design System
+- **Modern Aesthetics:** Built with Tailwind CSS v4 featuring glassmorphism, smooth gradients, and a bespoke color palette tailored for a clinical, professional feel.
+- **Micro-interactions:** Custom CSS keyframes (`fadeInUp`, `scaleIn`) and seamless `useTransition` hooks provide a fluid, app-like experience without full-page reloads.
+- **Global Toast Notifications:** Custom-built sliding notification system with progress bars for real-time feedback on async server actions.
 
-## 🗄️ Database Schema
-Key tables and types:
+---
 
-- **`User`**: `id`, `email`, `passwordHash`, `role` (ADMIN, SELLER).
-- **`Product`**: `id`, `name`, `baseUnit` (GRAM, MILLILITER, COUNT), `basePrice` (Decimal), `stock` (Decimal).
-- **`Order`**: `id`, `userId`, `status`, `totalAmount` (Decimal).
-- **`OrderItem`**: `id`, `orderId`, `productId`, `displayQuantity` (e.g., 2), `displayUnit` (e.g., 'kg'), `baseQuantity` (e.g., 2000).
+## 🏗️ System Architecture
 
-## ⚙️ Local Setup
+- **Frontend Framework:** Next.js 16 (App Router), React 19
+- **Backend Logic:** Next.js Server Actions (No external API routes needed)
+- **Database:** PostgreSQL (Hosted on Neon)
+- **ORM:** Prisma
+- **Authentication:** Custom JWT (`bcryptjs`, `jose`, `jsonwebtoken`)
+- **Styling:** Vanilla Tailwind CSS (v4) + Lucide React Icons
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repo-url>
-   cd med
-   ```
+---
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+## 🚀 Getting Started
 
-3. **Environment Variables:**
-   Create a `.env` file in the root:
-   ```env
-   DATABASE_URL="your-neon-pooled-postgresql-url"
-   DIRECT_URL="your-neon-direct-postgresql-url"
-   JWT_SECRET="your-secure-secret"
-   ```
+### Prerequisites
+- Node.js 18+
+- A [Neon Serverless Postgres](https://neon.tech/) database (or any PostgreSQL instance)
 
-   Use the pooled Neon connection string for `DATABASE_URL` in the app, and the direct Neon connection string for `DIRECT_URL` when running Prisma migrations.
+### 1. Clone the repository
+```bash
+git clone https://github.com/Aadi-110i/AasaMedChem.git
+cd AasaMedChem
+```
 
-4. **Setup Database:**
-   ```bash
-   npx prisma generate
-   npx prisma migrate dev --name init
-   ```
+### 2. Install dependencies
+```bash
+npm install
+```
 
-5. **Run the app:**
-   ```bash
-   npm run dev
-   ```
+### 3. Set up environment variables
+Create a `.env` file in the root directory:
+```env
+# Neon PostgreSQL Connection String
+DATABASE_URL="postgresql://user:password@endpoint.neon.tech/dbname?sslmode=require"
 
-## 🚢 Deployment to Vercel
+# JWT Secret for Authentication
+JWT_SECRET="your-super-secure-secret-key-2026"
+```
+
+### 4. Sync Database Schema & Seed Data
+```bash
+npx prisma db push --accept-data-loss
+npx prisma db seed
+```
+*Note: The seed script will automatically generate an `admin` and `seller` account.*
+
+### 5. Run the development server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## ☁️ Deployment
+
+This project is optimized for deployment on **Vercel**. 
+
 1. Push your code to GitHub.
-2. Connect the repository to Vercel.
-3. Add `DATABASE_URL` and `JWT_SECRET` to the project's Environment Variables in the Vercel dashboard.
-4. Vercel will automatically build and deploy the app.
+2. Import the repository into Vercel.
+3. Add the `DATABASE_URL` and `JWT_SECRET` in the Vercel Environment Variables settings.
+4. The custom `package.json` build script automatically runs `prisma generate` before `next build` to ensure the Prisma Client is bundled correctly.
 
-## 🔑 Test Credentials
-1. Navigate to `/register`.
-2. Create an **Admin** user.
-3. Create a **Seller** user.
-4. Log in as Admin to add products, then log in as Seller to place orders.
+---
+
+*Designed and developed for seamless, secure, and precise chemical distribution.*
