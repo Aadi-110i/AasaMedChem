@@ -23,7 +23,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden">
       {/* Left Side: Visual Section (Restored Split Layout) */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-[#050608] items-center justify-center overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-lab-deep items-center justify-center overflow-hidden">
         {/* Dynamic Background Gradients */}
         <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/30 via-transparent to-transparent z-0"></div>
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>

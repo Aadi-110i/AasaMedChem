@@ -6,6 +6,8 @@
   --color-success: #10b981;
   --color-danger: #ef4444;
   --color-border: #e2e8f0;
+  --color-lab-deep: #050608;
+  --color-lab-cyan: #00f5ff;
   
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -166,7 +168,7 @@ select option {
 
 /* Fix for dark background pages (Dashboard, Admin) */
 .bg-slate-900 select option,
-.bg-[#050608] select option {
+.bg-lab-deep select option {
   background: #0f172a;
   color: white;
 }
