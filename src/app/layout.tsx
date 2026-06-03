@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import { Inter, Lexend } from 'next/font/google';
+import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google';
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-jakarta',
 });
 
-const lexend = Lexend({
+const mono = Space_Mono({
   subsets: ['latin'],
+  weight: ['400', '700'],
   display: 'swap',
-  variable: '--font-lexend',
+  variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
-  title: "AasaMedChem | Premium Inventory & Order Management",
+  title: "AasaMedChem | Laboratory-Grade Management",
   description: "Advanced chemical inventory and order management system with precision and elegance.",
 };
 
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${lexend.variable}`}>
+    <html lang="en" className={`${jakarta.variable} ${mono.variable}`}>
       <body>
         <Navbar />
         <main>{children}</main>

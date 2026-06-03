@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { placeOrder } from '@/app/actions/orders';
 import { UnitType, formatINR, toBaseQuantity } from '@/lib/units';
 import { Decimal } from 'decimal.js';
+import { ChevronRight, Cpu, Target } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -66,42 +67,50 @@ export default function OrderForm({ products }: { products: Product[] }) {
     if (res.error) {
       setMessage({ type: 'error', text: res.error });
     } else {
-      setMessage({ type: 'success', text: 'Order placed successfully!' });
+      setMessage({ type: 'success', text: 'PROTOCOL_EXECUTED: ORDER_STAGED' });
       setQuantity('1');
     }
     setLoading(false);
   };
 
-  if (products.length === 0) return <p>No products available.</p>;
+  if (products.length === 0) return <div className="mono" style={{ color: 'var(--text-dim)' }}>SYSTEM_ERR: NO_INVENTORY_DETECTED</div>;
 
   return (
-    <form onSubmit={handleSubmit} className="card flex flex-col gap-4">
-      <h3 style={{ marginBottom: '0.5rem' }}>Place New Quotation</h3>
+    <form onSubmit={handleSubmit} className="card flex flex-col gap-6" style={{ background: 'rgba(255,255,255,0.01)', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', top: 0, right: 0, padding: '1rem', opacity: 0.2 }}>
+        <Cpu size={64} style={{ color: 'var(--accent-cyan)' }} />
+      </div>
+
+      <div className="flex items-center gap-3" style={{ marginBottom: '1rem' }}>
+        <Target size={18} style={{ color: 'var(--accent-cyan)' }} />
+        <h3 className="mono" style={{ fontSize: '0.8rem', textTransform: 'uppercase' }}>Quotation_Input_Matrix</h3>
+      </div>
       
       {message && (
-        <div className={`badge badge-${message.type === 'success' ? 'approved' : 'pending'}`} 
-             style={{ width: '100%', textAlign: 'center', marginBottom: '1rem', padding: '0.5rem' }}>
+        <div className={`mono badge badge-${message.type === 'success' ? 'approved' : 'pending'}`} 
+             style={{ width: '100%', textAlign: 'center', padding: '0.75rem', borderRadius: '0.5rem' }}>
           {message.text}
         </div>
       )}
 
       <div>
-        <label className="label">Select Product</label>
+        <label className="label">Target_Subject</label>
         <select 
           className="input" 
           value={selectedProductId} 
           onChange={(e) => handleProductChange(e.target.value)}
           required
+          style={{ width: '100%' }}
         >
           {products.map(p => (
-            <option key={p.id} value={p.id}>{p.name} (Stock: {p.stock.toString()})</option>
+            <option key={p.id} value={p.id}>{p.name} (AVAIL: {p.stock.toString()})</option>
           ))}
         </select>
       </div>
 
       <div className="flex gap-4">
         <div style={{ flex: 2 }}>
-          <label className="label">Quantity</label>
+          <label className="label">Quantity_Mass</label>
           <input 
             type="number" 
             className="input" 
@@ -110,10 +119,11 @@ export default function OrderForm({ products }: { products: Product[] }) {
             step="0.00000001"
             min="0"
             required 
+            placeholder="0.00"
           />
         </div>
         <div style={{ flex: 1 }}>
-          <label className="label">Unit</label>
+          <label className="label">Metric_ID</label>
           <select 
             className="input" 
             value={unit} 
@@ -127,15 +137,16 @@ export default function OrderForm({ products }: { products: Product[] }) {
         </div>
       </div>
 
-      <div className="flex justify-between items-center" style={{ marginTop: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: 'var(--radius)' }}>
-        <div>
-          <span className="label" style={{ marginBottom: 0 }}>Estimated Total</span>
-          <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--primary)' }}>
+      <div className="flex flex-col gap-4" style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(0, 245, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+        <div className="flex justify-between items-center">
+          <span className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>ESTIMATED_VALUATION</span>
+          <div className="mono" style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--accent-cyan)' }}>
             {formatINR(calculatedPrice.toString())}
           </div>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={loading || !quantity || Number(quantity) <= 0}>
-          {loading ? 'Processing...' : 'Place Order'}
+        <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={loading || !quantity || Number(quantity) <= 0}>
+          {loading ? 'PROCESSING_LOGIC...' : 'Execute_Order'}
+          {!loading && <ChevronRight size={16} />}
         </button>
       </div>
     </form>

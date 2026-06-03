@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { createProduct, deleteProduct } from '@/app/actions/products';
 import { formatINR } from '@/lib/units';
+import { Database, Box, History, Trash2, PlusCircle } from 'lucide-react';
 
 export default async function AdminDashboard() {
   const products = await prisma.product.findMany({
@@ -13,90 +14,99 @@ export default async function AdminDashboard() {
   });
 
   return (
-    <div className="container py-12">
-      <header style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Admin Control Center</h1>
-        <p style={{ color: 'var(--text-muted)' }}>Manage your global inventory and monitor real-time quotations.</p>
+    <div className="container py-16">
+      <header style={{ marginBottom: '5rem' }}>
+        <div className="mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem', fontSize: '0.8rem' }}>Root_Privileges: Active</div>
+        <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>Central Control</h1>
+        <p style={{ color: 'var(--text-secondary)', maxWidth: '600px' }}>
+          Global inventory oversight and real-time transaction monitoring. 
+          Modify lab-wide product parameters and verify order integrity.
+        </p>
       </header>
 
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-16">
         {/* Product Management Section */}
         <section>
-          <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.5rem' }}>Inventory Management</h2>
+          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
+            <Database size={24} style={{ color: 'var(--accent-cyan)' }} />
+            <h2 style={{ fontSize: '1.75rem' }}>Inventory_Registry</h2>
           </div>
           
-          <div className="card" style={{ marginBottom: '2.5rem', background: 'linear-gradient(to bottom right, #ffffff, #f8fafc)' }}>
-            <h3 style={{ marginBottom: '1.5rem', fontSize: '1.125rem' }}>Create New Product Entry</h3>
-            <form action={async (d) => { await createProduct(d); }} className="flex flex-col gap-6">
-              <div className="flex md-flex-row gap-6">
+          <div className="card" style={{ marginBottom: '4rem', background: 'rgba(255,255,255,0.01)' }}>
+            <div className="flex items-center gap-3" style={{ marginBottom: '2.5rem' }}>
+              <PlusCircle size={20} style={{ color: 'var(--accent-cyan)' }} />
+              <h3 className="mono" style={{ fontSize: '0.9rem', textTransform: 'uppercase' }}>Initialize_New_Product</h3>
+            </div>
+            
+            <form action={async (d) => { await createProduct(d); }} className="flex flex-col gap-8">
+              <div className="flex md-flex-row gap-8">
                 <div style={{ flex: 3 }}>
-                  <label className="label">Product Name</label>
-                  <input type="text" name="name" className="input" required placeholder="e.g., Sodium Chloride (Laboratory Grade)" />
+                  <label className="label">Entry_Name</label>
+                  <input type="text" name="name" className="input" required placeholder="NACL_99_PERCENT" />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label className="label">Base Dimension</label>
+                  <label className="label">Metric_Base</label>
                   <select name="baseUnit" className="input">
-                    <option value="GRAM">Mass (Gram)</option>
-                    <option value="MILLILITER">Volume (Milliliter)</option>
-                    <option value="COUNT">Discrete (Item)</option>
+                    <option value="GRAM">Mass (g)</option>
+                    <option value="MILLILITER">Volume (ml)</option>
+                    <option value="COUNT">Unit (count)</option>
                   </select>
                 </div>
               </div>
-              <div className="flex md-flex-row gap-6">
+              <div className="flex md-flex-row gap-8">
                 <div style={{ flex: 1 }}>
-                  <label className="label">Base Rate (INR / Unit)</label>
-                  <input type="number" name="basePrice" step="0.00000001" className="input" required placeholder="0.00" />
+                  <label className="label">Valuation_Rate (INR)</label>
+                  <input type="number" name="basePrice" step="0.00000001" className="input" required placeholder="0.00000000" />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label className="label">Stock Level (Base Units)</label>
-                  <input type="number" name="stock" step="0.00000001" className="input" required placeholder="1000" />
+                  <label className="label">Initial_Load (Metric)</label>
+                  <input type="number" name="stock" step="0.00000001" className="input" required placeholder="0.00000000" />
                 </div>
               </div>
               <div>
-                <label className="label">Technical Description</label>
-                <textarea name="description" className="input" rows={3} placeholder="Purity levels, storage requirements, etc."></textarea>
+                <label className="label">Technical_Notes</label>
+                <textarea name="description" className="input" rows={3} placeholder="Standard storage requirements..."></textarea>
               </div>
-              <button type="submit" className="btn btn-accent" style={{ alignSelf: 'flex-start', padding: '0.75rem 2.5rem' }}>
-                Register Product
+              <button type="submit" className="btn btn-primary" style={{ alignSelf: 'flex-start' }}>
+                Commit Entry
               </button>
             </form>
           </div>
 
-          <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-            <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid var(--border)', background: '#f8fafc' }}>
-              <h3 style={{ fontSize: '1rem' }}>Active Inventory</h3>
+          <div className="card" style={{ padding: '0', background: 'transparent', border: 'none' }}>
+            <div className="flex items-center gap-3" style={{ marginBottom: '2rem' }}>
+              <Box size={20} style={{ color: 'var(--accent-cyan)' }} />
+              <h3 className="mono" style={{ fontSize: '0.9rem', textTransform: 'uppercase' }}>Live_Stock_Status</h3>
             </div>
             <div style={{ overflowX: 'auto' }}>
-              <table className="admin-table" style={{ marginTop: '0' }}>
+              <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>Product Details</th>
-                    <th>Base Unit</th>
-                    <th>Rate/Base</th>
-                    <th>Stock Status</th>
-                    <th style={{ textAlign: 'right' }}>Actions</th>
+                    <th>Designation</th>
+                    <th>Class</th>
+                    <th>Valuation</th>
+                    <th>Metric_Status</th>
+                    <th style={{ textAlign: 'right' }}>Ops</th>
                   </tr>
                 </thead>
                 <tbody>
                   {products.map((p) => (
                     <tr key={p.id}>
+                      <td style={{ fontWeight: '700', color: 'white' }}>{p.name}</td>
+                      <td className="mono" style={{ fontSize: '0.7rem' }}>{p.baseUnit}</td>
+                      <td className="mono" style={{ color: 'var(--accent-cyan)' }}>{formatINR(p.basePrice.toString())}</td>
                       <td>
-                        <div style={{ fontWeight: '600', color: 'var(--primary)' }}>{p.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ID: {p.id.slice(-6).toUpperCase()}</div>
-                      </td>
-                      <td><span style={{ fontSize: '0.875rem' }}>{p.baseUnit}</span></td>
-                      <td><span style={{ fontWeight: '500' }}>{formatINR(p.basePrice.toString())}</span></td>
-                      <td>
-                        <div style={{ fontWeight: '600' }}>{p.stock.toString()}</div>
-                        <div style={{ width: '60px', height: '4px', background: '#e2e8f0', borderRadius: '2px', marginTop: '4px' }}>
-                          <div style={{ width: '70%', height: '100%', background: 'var(--success)', borderRadius: '2px' }}></div>
+                        <div className="flex items-center gap-3">
+                          <span className="mono" style={{ fontWeight: '700' }}>{p.stock.toString()}</span>
+                          <div style={{ flex: 1, height: '2px', background: 'rgba(255,255,255,0.05)', position: 'relative', minWidth: '80px' }}>
+                            <div style={{ position: 'absolute', height: '100%', background: 'var(--accent-cyan)', width: '60%' }}></div>
+                          </div>
                         </div>
                       </td>
                       <td style={{ textAlign: 'right' }}>
                         <form action={async () => { await deleteProduct(p.id); }}>
-                          <button type="submit" className="btn btn-outline btn-sm" style={{ color: 'var(--danger)', borderColor: '#fee2e2' }}>
-                            Decommission
+                          <button type="submit" className="op-btn delete">
+                            <Trash2 size={16} />
                           </button>
                         </form>
                       </td>
@@ -108,52 +118,48 @@ export default async function AdminDashboard() {
           </div>
         </section>
 
-        {/* Order Management Section */}
+        {/* Transaction History */}
         <section>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Recent Activity</h2>
-          <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
+            <History size={24} style={{ color: 'var(--accent-cyan)' }} />
+            <h2 style={{ fontSize: '1.75rem' }}>Order_Logs</h2>
+          </div>
+          <div className="card" style={{ padding: '0', background: 'transparent', border: 'none' }}>
             <div style={{ overflowX: 'auto' }}>
-              <table className="admin-table" style={{ marginTop: '0' }}>
+              <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>Reference</th>
-                    <th>Requester</th>
+                    <th>Hash</th>
+                    <th>Origin_Node</th>
                     <th>Specifications</th>
-                    <th>Valuation</th>
+                    <th>Net_Valuation</th>
                     <th>Status</th>
-                    <th>Timestamp</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orders.map((o) => (
                     <tr key={o.id}>
-                      <td style={{ fontWeight: '600' }}>#{o.id.slice(-8).toUpperCase()}</td>
-                      <td>
-                        <div style={{ fontSize: '0.875rem' }}>{o.user.email}</div>
-                      </td>
-                      <td>
+                      <td className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>{o.id.toUpperCase()}</td>
+                      <td className="mono" style={{ fontSize: '0.7rem' }}>{o.user.email}</td>
+                      <td style={{ fontSize: '0.875rem' }}>
                         {o.items.map(item => (
-                          <div key={item.id} style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                            <span style={{ color: 'var(--primary)', fontWeight: '500' }}>{item.product.name}</span>: {item.displayQuantity.toString()} {item.displayUnit}
+                          <div key={item.id}>
+                            {item.product.name} ({item.displayQuantity.toString()} {item.displayUnit})
                           </div>
                         ))}
                       </td>
-                      <td><span style={{ fontWeight: '700', color: 'var(--accent)' }}>{formatINR(o.totalAmount.toString())}</span></td>
+                      <td className="mono" style={{ color: 'var(--accent-cyan)', fontWeight: '700' }}>{formatINR(o.totalAmount.toString())}</td>
                       <td>
                         <span className={`badge badge-${o.status.toLowerCase()}`}>
                           {o.status}
                         </span>
                       </td>
-                      <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                        {new Date(o.createdAt).toLocaleDateString()}
-                      </td>
                     </tr>
                   ))}
                   {orders.length === 0 && (
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
-                        <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📋</div>
-                        No active quotations or orders found.
+                      <td colSpan={5} style={{ textAlign: 'center', padding: '5rem' }}>
+                        <div className="mono" style={{ color: 'var(--text-dim)' }}>ZERO_TRANSACTIONS_RECORDED</div>
                       </td>
                     </tr>
                   )}
@@ -163,6 +169,23 @@ export default async function AdminDashboard() {
           </div>
         </section>
       </div>
+      
+      <style jsx>{`
+        .op-btn {
+          background: transparent;
+          border: 1px solid rgba(255,255,255,0.05);
+          color: var(--text-dim);
+          padding: 0.5rem;
+          border-radius: 0.25rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .op-btn.delete:hover {
+          color: var(--danger);
+          border-color: var(--danger);
+          background: rgba(239, 68, 68, 0.05);
+        }
+      `}</style>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { getAuth } from '@/lib/auth';
 import OrderForm from '@/components/OrderForm';
 import { formatINR } from '@/lib/units';
-import { ShoppingCart, ClipboardList, Clock } from 'lucide-react';
+import { Terminal, Activity, ClipboardCheck, History } from 'lucide-react';
 
 export default async function SellerDashboard() {
   const auth = await getAuth();
@@ -18,48 +18,55 @@ export default async function SellerDashboard() {
   });
 
   return (
-    <div className="container py-12">
-      <header style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Sales Dashboard</h1>
-        <p style={{ color: 'var(--text-muted)' }}>Create precise quotations and track your fulfillment pipeline.</p>
+    <div className="container py-16">
+      <header style={{ marginBottom: '5rem' }}>
+        <div className="flex items-center gap-3 mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem', fontSize: '0.8rem' }}>
+          <Terminal size={16} />
+          <span>Session_Active: Sales_Officer</span>
+        </div>
+        <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>Operator Node</h1>
+        <p style={{ color: 'var(--text-secondary)', maxWidth: '600px' }}>
+          Execute high-precision chemical quotations. Interface with live inventory 
+          protocols and monitor your transaction pipeline.
+        </p>
       </header>
 
-      <div className="md-flex-row gap-12">
-        <div style={{ flex: 1.2 }}>
-          <div className="flex items-center gap-3" style={{ marginBottom: '1.5rem' }}>
-            <ShoppingCart size={24} style={{ color: 'var(--accent)' }} />
-            <h2 style={{ fontSize: '1.5rem' }}>New Quotation</h2>
+      <div className="flex flex-col lg-flex-row gap-16">
+        <div style={{ flex: 1 }}>
+          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
+            <Activity size={24} style={{ color: 'var(--accent-cyan)' }} />
+            <h2 style={{ fontSize: '1.75rem' }}>Quotation_Forge</h2>
           </div>
           <OrderForm products={products} />
         </div>
 
         <div style={{ flex: 1 }}>
-          <div className="flex items-center gap-3" style={{ marginBottom: '1.5rem' }}>
-            <ClipboardList size={24} style={{ color: 'var(--accent)' }} />
-            <h2 style={{ fontSize: '1.5rem' }}>Your History</h2>
+          <div className="flex items-center gap-4" style={{ marginBottom: '2.5rem' }}>
+            <History size={24} style={{ color: 'var(--accent-cyan)' }} />
+            <h2 style={{ fontSize: '1.75rem' }}>Personal_Ledger</h2>
           </div>
-          <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+          <div className="card" style={{ padding: '0', background: 'transparent', border: 'none' }}>
             <div style={{ overflowX: 'auto' }}>
-              <table className="admin-table" style={{ marginTop: '0' }}>
-                <thead style={{ background: '#f8fafc' }}>
+              <table className="admin-table">
+                <thead>
                   <tr>
-                    <th>Ref</th>
-                    <th>Specifications</th>
-                    <th>Valuation</th>
+                    <th>Ref_Hash</th>
+                    <th>Spec_ID</th>
+                    <th>Net_Valuation</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {myOrders.map(o => (
                     <tr key={o.id}>
-                      <td style={{ fontWeight: '600', fontSize: '0.875rem' }}>#{o.id.slice(-6).toUpperCase()}</td>
+                      <td className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>#{o.id.slice(-8).toUpperCase()}</td>
                       <td>
-                        <div style={{ fontWeight: '500' }}>{o.items[0]?.product.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                          {o.items[0]?.displayQuantity.toString()} {o.items[0]?.displayUnit}
+                        <div style={{ fontWeight: '700', color: 'white' }}>{o.items[0]?.product.name}</div>
+                        <div className="mono" style={{ fontSize: '0.65rem', color: 'var(--accent-cyan)' }}>
+                          {o.items[0]?.displayQuantity.toString()} {o.items[0]?.displayUnit.toUpperCase()}
                         </div>
                       </td>
-                      <td><span style={{ fontWeight: '600' }}>{formatINR(o.totalAmount.toString())}</span></td>
+                      <td className="mono" style={{ fontWeight: '700' }}>{formatINR(o.totalAmount.toString())}</td>
                       <td>
                         <span className={`badge badge-${o.status.toLowerCase()}`}>
                           {o.status}
@@ -69,9 +76,8 @@ export default async function SellerDashboard() {
                   ))}
                   {myOrders.length === 0 && (
                     <tr>
-                      <td colSpan={4} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                        <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}><Clock size={32} style={{ opacity: 0.3, margin: '0 auto' }} /></div>
-                        No order history yet.
+                      <td colSpan={4} style={{ textAlign: 'center', padding: '5rem' }}>
+                        <div className="mono" style={{ color: 'var(--text-dim)' }}>ZERO_ACTIVITY_HISTORY</div>
                       </td>
                     </tr>
                   )}
@@ -81,6 +87,18 @@ export default async function SellerDashboard() {
           </div>
         </div>
       </div>
+      
+      <style jsx>{`
+        .lg-flex-row {
+          display: flex;
+          flex-direction: row;
+        }
+        @media (max-width: 1024px) {
+          .lg-flex-row {
+            flex-direction: column;
+          }
+        }
+      `}</style>
     </div>
   );
 }
