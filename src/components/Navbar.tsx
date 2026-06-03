@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getAuth } from '@/lib/auth';
 import { logout } from '@/app/actions/auth';
-import { Microscope, LogOut, Terminal, Fingerprint } from 'lucide-react';
+import { Microscope, LogOut, Fingerprint } from 'lucide-react';
 
 export default async function Navbar() {
   const auth = await getAuth();
@@ -49,38 +49,6 @@ export default async function Navbar() {
           )}
         </div>
       </div>
-      <style jsx>{`
-        .nav-link {
-          color: var(--text-secondary);
-          transition: all 0.3s ease;
-        }
-        .nav-link:hover {
-          color: var(--accent-cyan);
-          text-shadow: 0 0 10px var(--accent-dim);
-        }
-        .logout-trigger {
-          background: transparent;
-          border: none;
-          color: var(--text-dim);
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .logout-trigger:hover {
-          color: var(--danger);
-        }
-        .btn-access {
-          padding: 0.5rem 1rem;
-          background: var(--accent-dim);
-          border: 1px solid var(--border-accent);
-          color: var(--accent-cyan);
-          border-radius: 0.25rem;
-          transition: all 0.2s;
-        }
-        .btn-access:hover {
-          background: var(--accent-cyan);
-          color: var(--bg-deep);
-        }
-      `}</style>
     </nav>
   );
 }

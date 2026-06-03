@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { getAuth } from '@/lib/auth';
 import OrderForm from '@/components/OrderForm';
 import { formatINR } from '@/lib/units';
-import { Terminal, Activity, ClipboardCheck, History } from 'lucide-react';
+import { Terminal, Activity, History } from 'lucide-react';
 
 export default async function SellerDashboard() {
   const auth = await getAuth();
@@ -87,18 +87,6 @@ export default async function SellerDashboard() {
           </div>
         </div>
       </div>
-      
-      <style jsx>{`
-        .lg-flex-row {
-          display: flex;
-          flex-direction: row;
-        }
-        @media (max-width: 1024px) {
-          .lg-flex-row {
-            flex-direction: column;
-          }
-        }
-      `}</style>
     </div>
   );
 }

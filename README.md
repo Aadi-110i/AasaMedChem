@@ -60,9 +60,12 @@ Key tables and types:
 3. **Environment Variables:**
    Create a `.env` file in the root:
    ```env
-   DATABASE_URL="your-neon-postgresql-url"
+   DATABASE_URL="your-neon-pooled-postgresql-url"
+   DIRECT_URL="your-neon-direct-postgresql-url"
    JWT_SECRET="your-secure-secret"
    ```
+
+   Use the pooled Neon connection string for `DATABASE_URL` in the app, and the direct Neon connection string for `DIRECT_URL` when running Prisma migrations.
 
 4. **Setup Database:**
    ```bash

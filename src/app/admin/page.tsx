@@ -169,23 +169,6 @@ export default async function AdminDashboard() {
           </div>
         </section>
       </div>
-      
-      <style jsx>{`
-        .op-btn {
-          background: transparent;
-          border: 1px solid rgba(255,255,255,0.05);
-          color: var(--text-dim);
-          padding: 0.5rem;
-          border-radius: 0.25rem;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-        .op-btn.delete:hover {
-          color: var(--danger);
-          border-color: var(--danger);
-          background: rgba(239, 68, 68, 0.05);
-        }
-      `}</style>
     </div>
   );
 }
