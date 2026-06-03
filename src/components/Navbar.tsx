@@ -19,8 +19,8 @@ export default async function Navbar() {
           
           <div className="hidden md:flex items-center gap-1">
             <Link href="/" className="px-4 py-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Platform</Link>
-            <Link href="#" className="px-4 py-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Compliance</Link>
-            <Link href="#" className="px-4 py-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Pricing</Link>
+            <Link href="/compliance" className="px-4 py-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Compliance</Link>
+            <Link href="/pricing" className="px-4 py-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Pricing</Link>
           </div>
         </div>
         

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -21,51 +22,22 @@ export default function LandingClient({ auth }: { auth: any }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-white">
       {/* Decorative background elements */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 0.5, scale: 1 }}
         transition={{ duration: 2, ease: "easeOut" }}
-        className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[120px] pointer-events-none" 
+        className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[120px] pointer-events-none"
       />
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 0.3, scale: 1 }}
         transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-        className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[100px] pointer-events-none" 
+        className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[100px] pointer-events-none"
       />
-
-      {/* Top Navigation Bar */}
-      <header className="relative z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-md">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 font-black text-slate-900 text-xl tracking-tighter hover:opacity-80 transition-opacity">
-            <div className="p-1.5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg text-white shadow-md">
-              <Microscope size={20} />
-            </div>
-            AASAMEDCHEM
-          </Link>
-          
-          <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-500 uppercase tracking-widest">
-            <Link href="/pricing" className="hover:text-blue-600 transition-colors flex items-center gap-2"><Zap size={14} /> Pricing Engine</Link>
-            <Link href="/compliance" className="hover:text-blue-600 transition-colors flex items-center gap-2"><ShieldCheck size={14} /> Compliance</Link>
-          </nav>
-          
-          <div className="flex items-center gap-4">
-            {auth ? (
-               <Link href={auth.role === 'ADMIN' ? '/admin' : auth.role === 'SELLER' ? '/seller' : '/buyer'} className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-colors">
-                 Dashboard
-               </Link>
-            ) : (
-               <Link href="/login" className="px-5 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-bold uppercase tracking-widest rounded-xl transition-colors">
-                 Sign In
-               </Link>
-            )}
-          </div>
-        </div>
-      </header>
 
       <div className="container relative mx-auto px-6 pt-16 pb-32">
         <div className="flex flex-col lg:flex-row items-center gap-16">
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -78,29 +50,29 @@ export default function LandingClient({ auth }: { auth: any }) {
               </span>
               Industry Standard Logistics
             </motion.div>
-            
+
             <motion.h1 variants={itemVariants} className="text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
               Precision Logistics for <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500">Chemical Intelligence.</span>
             </motion.h1>
-            
+
             <motion.p variants={itemVariants} className="text-xl text-slate-600 mb-10 max-w-xl leading-relaxed">
               The high-performance inventory and order management engine built specifically for modern laboratories and chemical suppliers.
             </motion.p>
-            
+
             <motion.div variants={itemVariants} className="flex flex-wrap gap-4 items-center">
               {auth ? (
-                <Link href={auth.role === 'ADMIN' ? '/admin' : auth.role === 'SELLER' ? '/seller' : '/buyer'} 
+                <Link href={auth.role === 'ADMIN' ? '/admin' : auth.role === 'SELLER' ? '/seller' : '/buyer'}
                   className="px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold shadow-xl shadow-slate-200 transition-all flex items-center gap-2 group">
                   Access Dashboard <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}><ArrowRight size={20} /></motion.div>
                 </Link>
               ) : (
                 <>
-                  <Link href="/login" 
+                  <Link href="/login"
                     className="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-2xl shadow-blue-200/50 transition-all transform hover:scale-105 active:scale-95">
                     Sign In
                   </Link>
-                  <Link href="/register" 
+                  <Link href="/register"
                     className="px-10 py-4 bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-100 rounded-2xl font-bold transition-all transform hover:scale-105 active:scale-95">
                     Create Free Account
                   </Link>
@@ -111,8 +83,8 @@ export default function LandingClient({ auth }: { auth: any }) {
             <motion.div variants={itemVariants} className="mt-12 flex items-center gap-6">
               <div className="flex -space-x-2">
                 {[1, 2, 3].map(i => (
-                  <motion.div 
-                    key={i} 
+                  <motion.div
+                    key={i}
                     whileHover={{ scale: 1.2, zIndex: 20 }}
                     className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 italic relative z-10 cursor-default"
                   >
@@ -126,7 +98,7 @@ export default function LandingClient({ auth }: { auth: any }) {
             </motion.div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 100, rotateY: 20 }}
             animate={{ opacity: 1, x: 0, rotateY: -15, rotateX: 10 }}
             whileHover={{ rotateY: -5, rotateX: 5, scale: 1.02 }}
@@ -136,7 +108,7 @@ export default function LandingClient({ auth }: { auth: any }) {
             <div className="relative z-10 p-10 rounded-[40px] bg-white/80 backdrop-blur-xl border border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] transition-all">
               <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-50">
                 <div className="flex items-center gap-4">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ rotate: 180 }}
                     className="p-4 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl text-white shadow-xl shadow-blue-200"
                   >
@@ -152,7 +124,7 @@ export default function LandingClient({ auth }: { auth: any }) {
                   <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Purity Verified</div>
                 </div>
               </div>
-              
+
               <div className="space-y-6">
                 <div className="space-y-3">
                   <div className="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-widest">
@@ -160,7 +132,7 @@ export default function LandingClient({ auth }: { auth: any }) {
                     <span>85%</span>
                   </div>
                   <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden p-0.5">
-                    <motion.div 
+                    <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: '85%' }}
                       transition={{ duration: 1.5, delay: 0.8 }}
@@ -182,14 +154,14 @@ export default function LandingClient({ auth }: { auth: any }) {
                 ))}
               </div>
             </div>
-            
+
             {/* Background 3D effects */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-blue-100/30 blur-[100px] -z-10 rounded-full"></div>
           </motion.div>
         </div>
 
         {/* Features Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -200,15 +172,15 @@ export default function LandingClient({ auth }: { auth: any }) {
             <h2 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">Engineered for Accuracy.</h2>
             <p className="text-slate-500 max-w-2xl mx-auto font-medium text-lg">Standardizing the way chemical inventories are tracked and managed across global teams.</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
               { icon: <ShieldCheck size={32} />, title: "Enterprise Access", desc: "Granular RBAC protocols for admins and sales officers with secure JWT validation." },
               { icon: <Scale size={32} />, title: "8-Decimal Depth", desc: "High-precision unit scales engineered for sensitive chemical and medical formulations." },
               { icon: <Zap size={32} />, title: "Instant Logistics", desc: "Automated quotation engine with real-time inventory reconciliation and stock locks." }
             ].map((f, i) => (
-              <motion.div 
-                key={i} 
+              <motion.div
+                key={i}
                 whileHover={{ y: -12 }}
                 className="group p-10 rounded-[40px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] transition-all"
               >
@@ -223,7 +195,7 @@ export default function LandingClient({ auth }: { auth: any }) {
         </motion.div>
 
         {/* Value Prop */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -236,8 +208,8 @@ export default function LandingClient({ auth }: { auth: any }) {
               <h2 className="text-4xl lg:text-6xl font-black mb-10 leading-tight tracking-tighter">Ready to modernize your <br /><span className="text-blue-500">inventory protocols?</span></h2>
               <div className="space-y-6">
                 {["Real-time Stock Monitoring", "Automated Compliance Reporting", "Seamless Team Collaboration"].map((item, i) => (
-                  <motion.div 
-                    key={i} 
+                  <motion.div
+                    key={i}
                     initial={{ x: -20, opacity: 0 }}
                     whileInView={{ x: 0, opacity: 1 }}
                     transition={{ delay: i * 0.1 }}
