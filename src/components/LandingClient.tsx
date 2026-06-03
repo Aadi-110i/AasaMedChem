@@ -1,9 +1,11 @@
-
 'use client';
 
 import Link from 'next/link';
 import { motion, Variants } from 'framer-motion';
-import { ShieldCheck, Scale, Zap, ArrowRight, Microscope, CheckCircle2 } from 'lucide-react';
+import { 
+  ShieldCheck, Scale, Zap, ArrowRight, Microscope, CheckCircle2, 
+  Globe2, Cpu, BarChart4, Beaker, Network, Workflow, Star
+} from 'lucide-react';
 
 export default function LandingClient({ auth }: { auth: any }) {
   const containerVariants: Variants = {
@@ -19,233 +21,373 @@ export default function LandingClient({ auth }: { auth: any }) {
     visible: { y: 0, opacity: 1, transition: { duration: 0.8 } }
   };
 
+  const scrollVariants: Variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }
+  };
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white">
-      {/* Decorative background elements */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 0.5, scale: 1 }}
-        transition={{ duration: 2, ease: "easeOut" }}
-        className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[120px] pointer-events-none"
-      />
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 0.3, scale: 1 }}
-        transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-        className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[100px] pointer-events-none"
-      />
+    <div className="relative min-h-screen overflow-x-hidden bg-white">
+      {/* 1. HERO SECTION */}
+      <section className="relative min-h-screen flex flex-col justify-center">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.5, scale: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+          className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[120px] pointer-events-none" 
+        />
+        
+        <div className="container relative mx-auto px-6 pt-24 pb-32">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="flex-1 text-left"
+            >
+              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-semibold mb-8">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                </span>
+                Version 4.0 Protocol Active
+              </motion.div>
+              
+              <motion.h1 variants={itemVariants} className="text-6xl lg:text-8xl font-black tracking-tight text-slate-900 leading-[1.05] mb-8">
+                The Fabric of <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500">Chemical Trust.</span>
+              </motion.h1>
+              
+              <motion.p variants={itemVariants} className="text-xl text-slate-500 mb-12 max-w-xl leading-relaxed font-medium">
+                High-performance infrastructure for global chemical supply chains. 
+                Precision unit management meets enterprise-grade security.
+              </motion.p>
+              
+              <motion.div variants={itemVariants} className="flex flex-wrap gap-6 items-center">
+                {auth ? (
+                  <Link href={auth.role === 'ADMIN' ? '/admin' : '/seller'} 
+                    className="px-10 py-5 bg-slate-950 hover:bg-slate-900 text-white rounded-2xl font-black shadow-2xl shadow-slate-200 transition-all flex items-center gap-2 group text-lg">
+                    Access Grid <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}><ArrowRight size={22} /></motion.div>
+                  </Link>
+                ) : (
+                  <>
+                    <Link href="/login" 
+                      className="px-12 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-xl shadow-2xl shadow-blue-200/50 transition-all transform hover:scale-105 active:scale-95">
+                      Sign In
+                    </Link>
+                    <Link href="/register" 
+                      className="px-12 py-5 bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-100 rounded-2xl font-black text-xl transition-all transform hover:scale-105 active:scale-95">
+                      Join the Network
+                    </Link>
+                  </>
+                )}
+              </motion.div>
+            </motion.div>
 
-      <div className="container relative mx-auto px-6 pt-16 pb-32">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
-          <motion.div
-            variants={containerVariants}
+            {/* 3D Visual Card */}
+            <motion.div 
+              initial={{ opacity: 0, x: 100, rotateY: 20 }}
+              animate={{ opacity: 1, x: 0, rotateY: -15, rotateX: 10 }}
+              whileHover={{ rotateY: -5, rotateX: 5, scale: 1.02 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="flex-1 relative perspective-1000 hidden lg:block"
+            >
+              <div className="relative z-10 p-12 rounded-[56px] bg-white/90 backdrop-blur-3xl border border-white shadow-[0_48px_80px_-16px_rgba(0,0,0,0.12)] transition-all overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                   <Network size={200} />
+                </div>
+                
+                <div className="flex items-center justify-between mb-10 pb-8 border-b border-slate-100">
+                  <div className="flex items-center gap-5">
+                    <motion.div 
+                      whileHover={{ rotate: 180 }}
+                      className="p-5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-3xl text-white shadow-xl shadow-blue-200"
+                    >
+                      <Microscope size={32} />
+                    </motion.div>
+                    <div>
+                      <div className="font-black text-slate-900 text-xl tracking-tight">Node_Sync Active</div>
+                      <div className="text-xs text-slate-400 font-mono tracking-[0.2em] uppercase font-bold mt-1">ID: ASM-990-2026</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-black text-slate-900 tracking-tighter">99.9%</div>
+                    <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">Accuracy Verified</div>
+                  </div>
+                </div>
+                
+                <div className="space-y-8">
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-xs font-black text-slate-400 uppercase tracking-widest">
+                      <span>Integrity Metric</span>
+                      <span>100%</span>
+                    </div>
+                    <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden p-1">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: 2, delay: 1 }}
+                        className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"
+                      ></motion.div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-12 grid grid-cols-2 gap-8">
+                  {[
+                    { label: "Throughput", val: "8.2k/hr" },
+                    { label: "Precision", val: "8-DEC" }
+                  ].map((stat, i) => (
+                    <div key={i} className="p-6 rounded-[32px] bg-slate-50/50 border border-slate-100 hover:bg-white transition-all cursor-default group hover:shadow-xl hover:shadow-slate-100">
+                      <div className="text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">{stat.label}</div>
+                      <div className="text-2xl font-black text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight">{stat.val}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] bg-blue-100/20 blur-[120px] -z-10 rounded-full"></div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. INFRASTRUCTURE STATS SECTION */}
+      <section className="py-32 bg-slate-950 text-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.1),transparent_40%)]"></div>
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
+            {[
+              { val: "₹140B+", label: "Capital Tracked", icon: <BarChart4 /> },
+              { val: "24/7", label: "Metric Monitoring", icon: <Zap /> },
+              { val: "8-DEC", label: "Decimal Precision", icon: <Scale /> },
+              { val: "Global", label: "Node Distribution", icon: <Globe2 /> }
+            ].map((s, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <div className="text-blue-500 mb-4 opacity-50 group-hover:opacity-100 transition-opacity">{s.icon}</div>
+                <div className="text-4xl font-black tracking-tighter mb-2">{s.val}</div>
+                <div className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">{s.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. CORE MODULES SECTION */}
+      <section className="py-56 bg-white">
+        <div className="container mx-auto px-6 text-center">
+          <motion.div 
             initial="hidden"
-            animate="visible"
-            className="flex-1 text-left"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={scrollVariants}
+            className="mb-32"
           >
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-semibold mb-8">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-              </span>
-              Industry Standard Logistics
-            </motion.div>
-
-            <motion.h1 variants={itemVariants} className="text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
-              Precision Logistics for <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500">Chemical Intelligence.</span>
-            </motion.h1>
-
-            <motion.p variants={itemVariants} className="text-xl text-slate-600 mb-10 max-w-xl leading-relaxed">
-              The high-performance inventory and order management engine built specifically for modern laboratories and chemical suppliers.
-            </motion.p>
-
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4 items-center">
-              {auth ? (
-                <Link href={auth.role === 'ADMIN' ? '/admin' : auth.role === 'SELLER' ? '/seller' : '/buyer'}
-                  className="px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold shadow-xl shadow-slate-200 transition-all flex items-center gap-2 group">
-                  Access Dashboard <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}><ArrowRight size={20} /></motion.div>
-                </Link>
-              ) : (
-                <>
-                  <Link href="/login"
-                    className="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-2xl shadow-blue-200/50 transition-all transform hover:scale-105 active:scale-95">
-                    Sign In
-                  </Link>
-                  <Link href="/register"
-                    className="px-10 py-4 bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-100 rounded-2xl font-bold transition-all transform hover:scale-105 active:scale-95">
-                    Create Free Account
-                  </Link>
-                </>
-              )}
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="mt-12 flex items-center gap-6">
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map(i => (
-                  <motion.div
-                    key={i}
-                    whileHover={{ scale: 1.2, zIndex: 20 }}
-                    className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 italic relative z-10 cursor-default"
-                  >
-                    U{i}
-                  </motion.div>
-                ))}
-              </div>
-              <div className="text-sm text-slate-500 font-medium">
-                Trusted by <span className="text-slate-900 font-bold underline decoration-blue-500 underline-offset-4 decoration-2">500+</span> chemical suppliers worldwide
-              </div>
-            </motion.div>
+            <h2 className="text-5xl lg:text-7xl font-black text-slate-900 mb-8 tracking-tighter">Engineered for Accuracy.</h2>
+            <p className="text-slate-500 max-w-2xl mx-auto font-medium text-xl leading-relaxed">
+              Standardizing chemical inventory tracking across global teams with a single source of technical truth.
+            </p>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 100, rotateY: 20 }}
-            animate={{ opacity: 1, x: 0, rotateY: -15, rotateX: 10 }}
-            whileHover={{ rotateY: -5, rotateX: 5, scale: 1.02 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 relative perspective-1000 hidden lg:block"
-          >
-            <div className="relative z-10 p-10 rounded-[40px] bg-white/80 backdrop-blur-xl border border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] transition-all">
-              <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-50">
-                <div className="flex items-center gap-4">
-                  <motion.div
-                    whileHover={{ rotate: 180 }}
-                    className="p-4 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl text-white shadow-xl shadow-blue-200"
-                  >
-                    <Microscope size={28} />
-                  </motion.div>
-                  <div>
-                    <div className="font-bold text-slate-900 text-lg">Lab-Batch #A99</div>
-                    <div className="text-xs text-slate-400 font-mono tracking-widest uppercase">ID: 8829-X01-2026</div>
-                  </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              { icon: <ShieldCheck size={36} />, title: "Enterprise Access", desc: "Granular RBAC protocols for admins and sales officers with secure JWT validation and biometric readiness." },
+              { icon: <Scale size={36} />, title: "8-Decimal Depth", desc: "High-precision unit scales engineered for the most sensitive chemical, biological, and medical formulations." },
+              { icon: <Zap size={36} />, title: "Instant Logistics", desc: "Automated quotation engine with real-time inventory reconciliation, stock locks, and race-condition prevention." }
+            ].map((f, i) => (
+              <motion.div 
+                key={i} 
+                whileHover={{ y: -16, scale: 1.02 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.8 }}
+                className="group p-12 rounded-[56px] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-[0_48px_96px_-24px_rgba(0,0,0,0.1)] transition-all duration-500 text-left"
+              >
+                <div className="mb-10 inline-flex p-6 rounded-[2rem] bg-white text-blue-600 shadow-xl shadow-slate-200 group-hover:bg-blue-600 group-hover:text-white transition-all duration-700">
+                  {f.icon}
                 </div>
-                <div className="text-right">
-                  <div className="text-3xl font-black text-slate-900 tracking-tighter">99.98%</div>
-                  <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Purity Verified</div>
-                </div>
-              </div>
+                <h3 className="text-3xl font-black text-slate-900 mb-6 tracking-tight">{f.title}</h3>
+                <p className="text-slate-500 leading-relaxed font-medium text-lg">{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-6">
-                <div className="space-y-3">
-                  <div className="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-widest">
-                    <span>Stability Index</span>
-                    <span>85%</span>
-                  </div>
-                  <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden p-0.5">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: '85%' }}
-                      transition={{ duration: 1.5, delay: 0.8 }}
-                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"
-                    ></motion.div>
-                  </div>
-                </div>
-              </div>
+      {/* 4. [NEW] LAB-TO-LEDGER WORKFLOW */}
+      <section className="py-56 bg-slate-50 relative overflow-hidden">
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-24">
+            <div className="flex-1 space-y-12">
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-5xl lg:text-6xl font-black text-slate-900 mb-8 tracking-tighter leading-[0.95]">From Specimen <br /><span className="text-blue-600">to Ledger.</span></h2>
+                <p className="text-xl text-slate-500 font-medium leading-relaxed">
+                  Our end-to-end operational protocol ensures that laboratory physical stock is 
+                  perfectly synchronized with financial valuations instantly.
+                </p>
+              </motion.div>
 
-              <div className="mt-10 grid grid-cols-2 gap-6">
+              <div className="space-y-8">
                 {[
-                  { label: "Storage", val: "12°C" },
-                  { label: "Last Sync", val: "2m ago" }
-                ].map((stat, i) => (
-                  <div key={i} className="p-5 rounded-3xl bg-slate-50/50 border border-slate-100 hover:bg-white transition-colors cursor-default group">
-                    <div className="text-xs text-slate-400 font-bold mb-1 uppercase tracking-widest">{stat.label}</div>
-                    <div className="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">{stat.val}</div>
-                  </div>
+                  { icon: <Beaker />, title: "Batch Initialization", desc: "Define chemical base units and purity valuations." },
+                  { icon: <Workflow />, title: "Automated Routing", desc: "Quotations are instantly routed to verification nodes." },
+                  { icon: <Cpu />, title: "Atomic Deductions", desc: "Precision stock deductions prevent over-ordering." }
+                ].map((step, i) => (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.2 }}
+                    viewport={{ once: true }}
+                    className="flex gap-6 items-start"
+                  >
+                    <div className="p-3 bg-white rounded-xl shadow-sm text-blue-600">{step.icon}</div>
+                    <div>
+                      <h4 className="font-black text-slate-900 uppercase tracking-widest text-sm mb-1">{step.title}</h4>
+                      <p className="text-slate-400 font-medium">{step.desc}</p>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* Background 3D effects */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-blue-100/30 blur-[100px] -z-10 rounded-full"></div>
-          </motion.div>
+            <div className="flex-1 relative">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="bg-slate-900 rounded-[56px] p-2 overflow-hidden shadow-2xl"
+              >
+                <div className="bg-slate-800 rounded-[48px] p-12 text-white">
+                  <div className="font-mono text-[10px] text-blue-400 uppercase tracking-[0.3em] mb-12">SYSTEM_RUNTIME_VISUAL</div>
+                  <div className="space-y-12">
+                    {[80, 60, 95].map((w, i) => (
+                      <div key={i} className="space-y-4">
+                        <div className="flex justify-between items-end">
+                          <div className="text-xs font-black uppercase tracking-widest">Protocol_{i+1}</div>
+                          <div className="text-2xl font-black">{w}%</div>
+                        </div>
+                        <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${w}%` }}
+                            transition={{ duration: 1.5, delay: 0.5 }}
+                            className="h-full bg-blue-500"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Features Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 100 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-56"
-        >
-          <div className="text-center mb-20">
-            <h2 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">Engineered for Accuracy.</h2>
-            <p className="text-slate-500 max-w-2xl mx-auto font-medium text-lg">Standardizing the way chemical inventories are tracked and managed across global teams.</p>
+      {/* 5. [NEW] TESTIMONIALS SECTION */}
+      <section className="py-56 bg-white overflow-hidden">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-32">
+             <div className="inline-flex p-3 bg-slate-950 text-white rounded-2xl mb-8"><Star size={24} /></div>
+             <h2 className="text-5xl font-black text-slate-900 tracking-tighter">Validated by Industry Leaders.</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {[
-              { icon: <ShieldCheck size={32} />, title: "Enterprise Access", desc: "Granular RBAC protocols for admins and sales officers with secure JWT validation." },
-              { icon: <Scale size={32} />, title: "8-Decimal Depth", desc: "High-precision unit scales engineered for sensitive chemical and medical formulations." },
-              { icon: <Zap size={32} />, title: "Instant Logistics", desc: "Automated quotation engine with real-time inventory reconciliation and stock locks." }
-            ].map((f, i) => (
-              <motion.div
+              { name: "Dr. Elena V.", role: "Lead Chemist, BioGrid Labs", text: "The 8-decimal precision is a game-changer. We've eliminated inventory discrepancies entirely since establishing our node." },
+              { name: "Marcus Thorne", role: "Logistics Director, ChemLink", text: "Automated quotations and instant stock locks solved our biggest problem: double-selling high-value chemical batches." }
+            ].map((t, i) => (
+              <motion.div 
                 key={i}
-                whileHover={{ y: -12 }}
-                className="group p-10 rounded-[40px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] transition-all"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="p-16 rounded-[64px] bg-slate-50 border border-slate-100 relative group hover:bg-slate-950 hover:text-white transition-all duration-700"
               >
-                <div className="mb-8 inline-flex p-5 rounded-3xl bg-slate-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-500 shadow-sm">
-                  {f.icon}
+                <div className="text-4xl font-black mb-8 leading-relaxed italic">"{t.text}"</div>
+                <div>
+                   <div className="font-black text-xl uppercase tracking-tighter">{t.name}</div>
+                   <div className="text-blue-500 font-black uppercase text-[10px] tracking-widest mt-1">{t.role}</div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">{f.title}</h3>
-                <p className="text-slate-500 leading-relaxed font-medium">{f.desc}</p>
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* Value Prop */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+      {/* 6. CALL TO ACTION SECTION */}
+      <section className="py-56 px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="mt-56 p-12 lg:p-24 rounded-[64px] bg-slate-950 text-white relative overflow-hidden"
+          className="container mx-auto p-12 lg:p-32 rounded-[80px] bg-slate-950 text-white relative overflow-hidden shadow-[0_64px_128px_-32px_rgba(37,99,235,0.4)]"
         >
-          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.2),transparent_50%)]"></div>
-          <div className="relative z-10 flex flex-col lg:flex-row items-center gap-16">
+          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.25),transparent_60%)]"></div>
+          <div className="relative z-10 flex flex-col lg:flex-row items-center gap-24">
             <div className="flex-1">
-              <h2 className="text-4xl lg:text-6xl font-black mb-10 leading-tight tracking-tighter">Ready to modernize your <br /><span className="text-blue-500">inventory protocols?</span></h2>
-              <div className="space-y-6">
-                {["Real-time Stock Monitoring", "Automated Compliance Reporting", "Seamless Team Collaboration"].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ x: -20, opacity: 0 }}
-                    whileInView={{ x: 0, opacity: 1 }}
+              <h2 className="text-5xl lg:text-8xl font-black mb-12 leading-[0.9] tracking-tighter">Ready to modernize <br /><span className="text-blue-500 underline decoration-white/10 underline-offset-8">your lab?</span></h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {["Real-time Stock Monitoring", "Automated Compliance", "Multi-Node Sync", "Precision Valuations"].map((item, i) => (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex items-center gap-4 text-slate-400 font-bold text-lg"
+                    className="flex items-center gap-4 text-slate-400 font-black uppercase text-xs tracking-widest"
                   >
-                    <CheckCircle2 size={24} className="text-blue-500" />
+                    <CheckCircle2 size={18} className="text-blue-500" />
                     {item}
                   </motion.div>
                 ))}
               </div>
             </div>
             <div className="flex-shrink-0">
-              <Link href="/register" className="px-12 py-6 bg-blue-600 hover:bg-blue-700 hover:scale-105 active:scale-95 rounded-3xl font-black text-xl transition-all shadow-[0_20px_50px_rgba(37,99,235,0.3)]">
-                Establish Your Lab Today
+              <Link href="/register" className="px-16 py-8 bg-blue-600 hover:bg-blue-700 hover:scale-105 active:scale-95 rounded-3xl font-black text-2xl transition-all shadow-[0_32px_64px_rgba(37,99,235,0.4)]">
+                Establish Identity
               </Link>
             </div>
           </div>
         </motion.div>
-      </div>
+      </section>
 
-      <footer className="py-16 border-t border-slate-50 bg-slate-50/50">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-3 font-black text-slate-900 text-2xl tracking-tighter">
-            <div className="p-1.5 bg-slate-900 rounded-lg text-white">
-              <Microscope size={20} />
+      {/* 7. FOOTER */}
+      <footer className="py-24 border-t border-slate-100 bg-slate-50/50">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+            <div className="flex flex-col items-center md:items-start gap-4">
+              <div className="flex items-center gap-3 font-black text-slate-900 text-3xl tracking-tighter">
+                <div className="p-2 bg-slate-900 rounded-xl text-white">
+                  <Microscope size={24} />
+                </div>
+                AASAMEDCHEM
+              </div>
+              <p className="text-slate-400 font-bold text-sm tracking-tight text-center md:text-left">Standardizing precision logistics <br />for the global chemical network.</p>
             </div>
-            AASAMEDCHEM
-          </div>
-          <div className="text-sm text-slate-400 font-bold">
-            © 2026 AASAMEDCHEM LOGISTICS. ALL RIGHTS RESERVED.
-          </div>
-          <div className="flex gap-10 text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex-wrap justify-center">
-            <Link href="/pricing" className="hover:text-blue-600 transition-colors">Pricing</Link>
-            <Link href="/compliance" className="hover:text-blue-600 transition-colors">Compliance</Link>
-            <a href="#" className="hover:text-blue-600 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Terms</a>
+            
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex gap-12 text-xs font-black text-slate-400 uppercase tracking-[0.3em]">
+                <a href="#" className="hover:text-blue-600 transition-colors">Platform</a>
+                <a href="#" className="hover:text-blue-600 transition-colors">Network</a>
+                <a href="#" className="hover:text-blue-600 transition-colors">Nodes</a>
+                <a href="#" className="hover:text-blue-600 transition-colors">Legal</a>
+              </div>
+              <div className="text-[10px] text-slate-300 font-black uppercase tracking-widest">
+                © 2026 AASAMEDCHEM LOGISTICS NODES. ALL RIGHTS RESERVED.
+              </div>
+            </div>
           </div>
         </div>
       </footer>
