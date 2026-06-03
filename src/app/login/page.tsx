@@ -23,14 +23,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden">
       {/* Left Side: Video/Visual Section */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-[#050608] items-center justify-center overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#050608] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent"></div>
         <video 
           autoPlay 
           loop 
           muted 
           playsInline
-          className="relative w-[85%] h-[85%] object-contain mix-blend-screen opacity-90 z-10"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] max-h-[80%] object-contain mix-blend-screen opacity-90 z-10"
         >
           <source src="/videoforlogin.mp4" type="video/mp4" />
         </video>
