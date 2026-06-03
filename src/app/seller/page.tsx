@@ -6,8 +6,12 @@ import { ClipboardList, Clock, Activity, Target, FlaskConical } from 'lucide-rea
 export default async function SellerDashboard() {
   const auth = await getAuth();
 
+  if (!auth) {
+    return <div>Unauthorized access. Please log in.</div>;
+  }
+
   const myRequests = await prisma.sellerRequest.findMany({
-    where: { userId: auth?.userId },
+    where: { userId: auth.userId },
     orderBy: { createdAt: 'desc' },
   });
 

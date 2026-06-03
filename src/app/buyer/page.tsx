@@ -6,13 +6,17 @@ import { ShoppingCart, ClipboardList, Clock, Activity, Target, ShoppingBag } fro
 
 export default async function BuyerDashboard() {
   const auth = await getAuth();
+
+  if (!auth) {
+    return <div>Unauthorized access. Please log in.</div>;
+  }
   
   const products = await prisma.product.findMany({
     orderBy: { name: 'asc' },
   });
 
   const myOrders = await prisma.order.findMany({
-    where: { userId: auth?.userId },
+    where: { userId: auth.userId },
     include: { items: { include: { product: true } } },
     orderBy: { createdAt: 'desc' },
   });
