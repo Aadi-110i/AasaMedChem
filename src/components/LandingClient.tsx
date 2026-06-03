@@ -179,44 +179,121 @@ export default function LandingClient({ auth }: { auth: any }) {
         </div>
       </section>
 
-      {/* 3. CORE MODULES SECTION */}
-      <section className="py-56 bg-white">
-        <div className="container mx-auto px-6 text-center">
+      {/* 3. PREMIUM PRODUCT CATALOG (Replacing generic features) */}
+      <section className="py-56 bg-slate-50">
+        <div className="container mx-auto px-6">
           <motion.div 
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true }}
             variants={scrollVariants}
-            className="mb-32"
+            className="text-center mb-24"
           >
-            <h2 className="text-5xl lg:text-7xl font-black text-slate-900 mb-8 tracking-tighter">Engineered for Accuracy.</h2>
+            <div className="text-blue-600 font-black text-xs uppercase tracking-[0.3em] mb-4">Precision Procurement</div>
+            <h2 className="text-5xl lg:text-7xl font-black text-slate-900 mb-8 tracking-tighter">Explore Laboratory <span className="text-blue-600">Standard Batches.</span></h2>
             <p className="text-slate-500 max-w-2xl mx-auto font-medium text-xl leading-relaxed">
-              Standardizing chemical inventory tracking across global teams with a single source of technical truth.
+              Browse our verified chemical inventory. Each entry is batch-coded, purity-verified, and ready for instant logistics routing.
             </p>
           </motion.div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+          {/* Amazon-style Product Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {[
-              { icon: <ShieldCheck size={36} />, title: "Enterprise Access", desc: "Granular RBAC protocols for admins and sales officers with secure JWT validation and biometric readiness." },
-              { icon: <Scale size={36} />, title: "8-Decimal Depth", desc: "High-precision unit scales engineered for the most sensitive chemical, biological, and medical formulations." },
-              { icon: <Zap size={36} />, title: "Instant Logistics", desc: "Automated quotation engine with real-time inventory reconciliation, stock locks, and race-condition prevention." }
-            ].map((f, i) => (
+              { 
+                name: "Sodium Chloride (ACS Grade)", 
+                id: "NACL-99-A", 
+                price: "₹0.18", 
+                unit: "gram",
+                purity: "99.9%",
+                rating: 4.9,
+                reviews: 124,
+                tag: "Best Seller",
+                imageColor: "bg-blue-50"
+              },
+              { 
+                name: "Ethanol (Anhydrous)", 
+                id: "ETH-100-P", 
+                price: "₹0.45", 
+                unit: "ml",
+                purity: "100%",
+                rating: 4.8,
+                reviews: 89,
+                tag: "High Purity",
+                imageColor: "bg-emerald-50"
+              },
+              { 
+                name: "Magnesium Sulfate", 
+                id: "MGSO4-LAB", 
+                price: "₹0.22", 
+                unit: "gram",
+                purity: "98.5%",
+                rating: 4.7,
+                reviews: 56,
+                tag: "Bulk Ready",
+                imageColor: "bg-indigo-50"
+              }
+            ].map((p, i) => (
               <motion.div 
-                key={i} 
-                whileHover={{ y: -16, scale: 1.02 }}
-                initial={{ opacity: 0, y: 50 }}
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.8 }}
-                className="group p-12 rounded-[56px] bg-slate-50/50 border border-slate-100 hover:bg-white hover:shadow-[0_48px_96px_-24px_rgba(0,0,0,0.1)] transition-all duration-500 text-left"
+                className="group bg-white rounded-[40px] border border-slate-200 overflow-hidden hover:shadow-[0_48px_96px_-24px_rgba(0,0,0,0.12)] transition-all duration-700 flex flex-col"
               >
-                <div className="mb-10 inline-flex p-6 rounded-[2rem] bg-white text-blue-600 shadow-xl shadow-slate-200 group-hover:bg-blue-600 group-hover:text-white transition-all duration-700">
-                  {f.icon}
+                {/* Product Image Area */}
+                <div className={`relative h-72 ${p.imageColor} flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-700`}>
+                  <div className="absolute top-6 left-6 flex flex-col gap-2">
+                    <span className="px-4 py-1.5 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-full">{p.tag}</span>
+                    <span className="px-4 py-1.5 bg-white/80 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-widest rounded-full border border-slate-100">{p.purity} Purity</span>
+                  </div>
+                  <Microscope size={80} className="text-slate-900/10" />
+                  <div className="absolute bottom-6 right-6 p-4 bg-white rounded-2xl shadow-xl shadow-slate-200/50">
+                     <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Base Valuation</div>
+                     <div className="text-xl font-black text-slate-900">{p.price}<span className="text-slate-400 text-xs font-bold">/{p.unit}</span></div>
+                  </div>
                 </div>
-                <h3 className="text-3xl font-black text-slate-900 mb-6 tracking-tight">{f.title}</h3>
-                <p className="text-slate-500 leading-relaxed font-medium text-lg">{f.desc}</p>
+
+                {/* Product Info */}
+                <div className="p-10 flex-1 flex flex-col">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex text-amber-400">
+                      {[1, 2, 3, 4, 5].map(star => <Star key={star} size={14} fill="currentColor" />)}
+                    </div>
+                    <span className="text-xs font-bold text-slate-400">({p.reviews} Verified Inquiries)</span>
+                  </div>
+
+                  <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-blue-600 transition-colors">{p.name}</h3>
+                  <p className="text-slate-400 font-mono text-[10px] uppercase tracking-widest mb-6 font-bold">Standard Batch Ref: {p.id}</p>
+                  
+                  <div className="mt-auto space-y-6">
+                    <div className="flex justify-between items-center py-4 border-y border-slate-50">
+                      <div>
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Availability</div>
+                        <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                          In-Stock Node
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Min. Order</div>
+                        <div className="text-slate-900 font-black">1.00 <span className="text-xs uppercase">Metric</span></div>
+                      </div>
+                    </div>
+
+                    <Link href="/register" className="w-full py-5 bg-slate-50 group-hover:bg-blue-600 text-slate-900 group-hover:text-white text-center rounded-2xl font-black uppercase text-xs tracking-widest transition-all duration-500 flex items-center justify-center gap-3">
+                      Generate Quote <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                </div>
               </motion.div>
             ))}
+          </div>
+          
+          <div className="mt-20 text-center">
+             <button className="text-slate-400 font-black uppercase text-xs tracking-[0.3em] hover:text-blue-600 transition-colors py-4 px-8 border border-slate-200 rounded-2xl hover:bg-white">
+                View Expanded Catalog (500+ Items)
+             </button>
           </div>
         </div>
       </section>
