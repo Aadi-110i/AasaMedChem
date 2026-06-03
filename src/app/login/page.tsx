@@ -23,22 +23,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden">
       {/* Left Side: Video/Visual Section */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-[#000000] items-center justify-center overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#050608] items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent"></div>
         <video 
           autoPlay 
           loop 
           muted 
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-80 z-10 mix-blend-screen"
-          style={{ 
-            maskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)',
-            WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)'
-          }}
+          className="relative w-[85%] h-[85%] object-contain mix-blend-screen opacity-90 z-10"
         >
           <source src="/videoforlogin.mp4" type="video/mp4" />
         </video>
-        
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-transparent z-0"></div>
         
         <div className="relative z-10 p-16 max-w-xl">
           <motion.div 
