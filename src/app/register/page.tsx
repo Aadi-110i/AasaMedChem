@@ -120,16 +120,18 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Assigned Protocol</label>
-              <div className="relative">
+              <div className="relative group">
                 <select 
                   name="role" 
-                  className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[20px] outline-none transition-all font-bold text-slate-900 appearance-none shadow-sm shadow-slate-100/50"
+                  className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-[20px] outline-none transition-all font-bold text-slate-900 appearance-none shadow-sm shadow-slate-100/50 cursor-pointer"
                 >
                   <option value="BUYER">Buyer (Purchase Chemicals)</option>
                   <option value="SELLER">Seller (Supply Chemicals)</option>
                   <option value="ADMIN">System Administrator (Root)</option>
                 </select>
-                <Shield size={20} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300 group-hover:text-blue-500 transition-colors">
+                  <Shield size={20} />
+                </div>
               </div>
             </div>
             
