@@ -23,18 +23,22 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden">
       {/* Left Side: Video/Visual Section */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-black items-center justify-center overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#000000] items-center justify-center overflow-hidden">
         <video 
           autoPlay 
           loop 
           muted 
           playsInline
-          className="absolute inset-0 w-full h-full object-contain opacity-80 z-10 mix-blend-screen"
+          className="absolute inset-0 w-full h-full object-cover opacity-80 z-10 mix-blend-screen"
+          style={{ 
+            maskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)',
+            WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)'
+          }}
         >
           <source src="/videoforlogin.mp4" type="video/mp4" />
         </video>
         
-        <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/40 to-black/80 z-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/40 to-transparent z-0"></div>
         
         <div className="relative z-10 p-16 max-w-xl">
           <motion.div 
