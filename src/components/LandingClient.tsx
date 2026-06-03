@@ -34,7 +34,36 @@ export default function LandingClient({ auth }: { auth: any }) {
         className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[100px] pointer-events-none" 
       />
 
-      <div className="container relative mx-auto px-6 pt-24 pb-32">
+      {/* Top Navigation Bar */}
+      <header className="relative z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-md">
+        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 font-black text-slate-900 text-xl tracking-tighter hover:opacity-80 transition-opacity">
+            <div className="p-1.5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg text-white shadow-md">
+              <Microscope size={20} />
+            </div>
+            AASAMEDCHEM
+          </Link>
+          
+          <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-500 uppercase tracking-widest">
+            <Link href="/pricing" className="hover:text-blue-600 transition-colors flex items-center gap-2"><Zap size={14} /> Pricing Engine</Link>
+            <Link href="/compliance" className="hover:text-blue-600 transition-colors flex items-center gap-2"><ShieldCheck size={14} /> Compliance</Link>
+          </nav>
+          
+          <div className="flex items-center gap-4">
+            {auth ? (
+               <Link href={auth.role === 'ADMIN' ? '/admin' : auth.role === 'SELLER' ? '/seller' : '/buyer'} className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-widest rounded-xl transition-colors">
+                 Dashboard
+               </Link>
+            ) : (
+               <Link href="/login" className="px-5 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-bold uppercase tracking-widest rounded-xl transition-colors">
+                 Sign In
+               </Link>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div className="container relative mx-auto px-6 pt-16 pb-32">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <motion.div 
             variants={containerVariants}
@@ -61,7 +90,7 @@ export default function LandingClient({ auth }: { auth: any }) {
             
             <motion.div variants={itemVariants} className="flex flex-wrap gap-4 items-center">
               {auth ? (
-                <Link href={auth.role === 'ADMIN' ? '/admin' : '/seller'} 
+                <Link href={auth.role === 'ADMIN' ? '/admin' : auth.role === 'SELLER' ? '/seller' : '/buyer'} 
                   className="px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold shadow-xl shadow-slate-200 transition-all flex items-center gap-2 group">
                   Access Dashboard <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}><ArrowRight size={20} /></motion.div>
                 </Link>
@@ -240,10 +269,11 @@ export default function LandingClient({ auth }: { auth: any }) {
           <div className="text-sm text-slate-400 font-bold">
             © 2026 AASAMEDCHEM LOGISTICS. ALL RIGHTS RESERVED.
           </div>
-          <div className="flex gap-10 text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
+          <div className="flex gap-10 text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex-wrap justify-center">
+            <Link href="/pricing" className="hover:text-blue-600 transition-colors">Pricing</Link>
+            <Link href="/compliance" className="hover:text-blue-600 transition-colors">Compliance</Link>
             <a href="#" className="hover:text-blue-600 transition-colors">Privacy</a>
             <a href="#" className="hover:text-blue-600 transition-colors">Terms</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Status</a>
           </div>
         </div>
       </footer>
