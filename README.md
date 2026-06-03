@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AasaMedChem Inventory and Order Management System
 
-## Getting Started
+A robust, high-precision inventory and order management system designed for the chemical and medical industry. Built with Next.js, Neon PostgreSQL, and Prisma.
 
-First, run the development server:
+## 🚀 Live Demo
+[Link to your Vercel deployment would go here]
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
+- **Role-Based Access Control:** Separate dashboards for **Admin** (inventory management, order oversight) and **Seller** (quotation creation, order tracking).
+- **Dynamic Unit Conversion:** Seamlessly handle orders in `g`, `kg`, `mL`, `L`, or `item` units regardless of how items are stored.
+- **High-Precision Pricing:** Financial calculations handled with `Decimal.js` to ensure 8-decimal precision for chemical weights and INR amounts.
+- **Inventory Tracking:** Real-time stock updates with automated deductions upon order placement.
+- **Medical UI Theme:** A clean, professional interface built with custom Vanilla CSS.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
+- **Frontend:** Next.js 15 (App Router), Vanilla CSS, TypeScript.
+- **Backend:** Next.js Server Actions, Custom JWT Authentication.
+- **Database:** Neon PostgreSQL.
+- **ORM:** Prisma.
+- **Utilities:** `decimal.js` for math, `jose` for middleware auth.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📐 System Architecture
+The application uses a **Server-First** approach. Most logic resides in Server Actions to ensure security and direct database interaction. Middleware handles route protection by verifying JWT tokens stored in HTTP-only cookies.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Unit Storage & Conversion Strategy
+To ensure maximum data integrity and prevent rounding errors, we use a **Base Unit Storage** strategy:
 
-## Learn More
+1. **Internal Storage:**
+   - All weights are stored in **Grams (g)**.
+   - All volumes are stored in **Milliliters (mL)**.
+   - Individual counts are stored as **Items**.
+2. **Pricing:**
+   - Prices (`basePrice`) are stored as the rate **per base unit** (e.g., price per 1 gram).
+3. **Conversion Logic:**
+   - Conversion factors (e.g., 1000 for kg/g) are applied in the `src/lib/units.ts` utility.
+   - **Order Placement:** When a user orders `2 kg`, the system converts this to `2000 g`, verifies stock against the gram-based inventory, and calculates `2000 * basePrice`.
+   - **Consistency:** All calculations are performed using the `Decimal` type both in the database (PostgreSQL `Decimal(20, 8)`) and the application layer.
 
-To learn more about Next.js, take a look at the following resources:
+## 🗄️ Database Schema
+Key tables and types:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **`User`**: `id`, `email`, `passwordHash`, `role` (ADMIN, SELLER).
+- **`Product`**: `id`, `name`, `baseUnit` (GRAM, MILLILITER, COUNT), `basePrice` (Decimal), `stock` (Decimal).
+- **`Order`**: `id`, `userId`, `status`, `totalAmount` (Decimal).
+- **`OrderItem`**: `id`, `orderId`, `productId`, `displayQuantity` (e.g., 2), `displayUnit` (e.g., 'kg'), `baseQuantity` (e.g., 2000).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⚙️ Local Setup
 
-## Deploy on Vercel
+1. **Clone the repository:**
+   ```bash
+   git clone <repo-url>
+   cd med
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Environment Variables:**
+   Create a `.env` file in the root:
+   ```env
+   DATABASE_URL="your-neon-postgresql-url"
+   JWT_SECRET="your-secure-secret"
+   ```
+
+4. **Setup Database:**
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev --name init
+   ```
+
+5. **Run the app:**
+   ```bash
+   npm run dev
+   ```
+
+## 🚢 Deployment to Vercel
+1. Push your code to GitHub.
+2. Connect the repository to Vercel.
+3. Add `DATABASE_URL` and `JWT_SECRET` to the project's Environment Variables in the Vercel dashboard.
+4. Vercel will automatically build and deploy the app.
+
+## 🔑 Test Credentials
+1. Navigate to `/register`.
+2. Create an **Admin** user.
+3. Create a **Seller** user.
+4. Log in as Admin to add products, then log in as Seller to place orders.

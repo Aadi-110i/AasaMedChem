@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  SELLER
+}
+
+enum BaseUnit {
+  GRAM
+  MILLILITER
+  COUNT
+}
+
+enum OrderStatus {
+  PENDING
+  APPROVED
+  FULFILLED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(SELLER)
+  orders       Order[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  baseUnit    BaseUnit
+  basePrice   Decimal     @db.Decimal(20, 8)
+  stock       Decimal     @db.Decimal(20, 8)
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  status      OrderStatus @default(PENDING)
+  totalAmount Decimal     @db.Decimal(20, 8)
+  items       OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model OrderItem {
+  id              String  @id @default(cuid())
+  orderId         String
+  order           Order   @relation(fields: [orderId], references: [id])
+  productId       String
+  product         Product @relation(fields: [productId], references: [id])
+  displayQuantity Decimal @db.Decimal(20, 8)
+  displayUnit     String
+  baseQuantity    Decimal @db.Decimal(20, 8)
+  unitPrice       Decimal @db.Decimal(20, 8)
+  subtotal        Decimal @db.Decimal(20, 8)
+}
