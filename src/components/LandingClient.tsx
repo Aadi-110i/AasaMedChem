@@ -152,7 +152,7 @@ export default function LandingClient({ auth }: { auth: any }) {
       </section>
 
       {/* 2. INFRASTRUCTURE STATS SECTION */}
-      <section className="py-32 bg-slate-950 text-white relative overflow-hidden">
+      <section className="py-16 bg-slate-950 text-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.1),transparent_40%)]"></div>
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
