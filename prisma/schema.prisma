@@ -10,6 +10,7 @@ datasource db {
 enum Role {
   ADMIN
   SELLER
+  BUYER
 }
 
 enum BaseUnit {
@@ -24,14 +25,21 @@ enum OrderStatus {
   FULFILLED
 }
 
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(SELLER)
-  orders       Order[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              String           @id @default(cuid())
+  email           String           @unique
+  passwordHash    String
+  role            Role             @default(BUYER)
+  orders          Order[]
+  sellerRequests  SellerRequest[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   @@map("app_users")
 }
@@ -41,8 +49,8 @@ model Product {
   name        String
   description String?
   baseUnit    BaseUnit
-  basePrice   Decimal     @db.Decimal(20, 8)
-  stock       Decimal     @db.Decimal(20, 8)
+  basePrice   Decimal     @db.Decimal(20, 6)
+  stock       Decimal     @db.Decimal(20, 6)
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -55,7 +63,7 @@ model Order {
   userId      String
   user        User        @relation(fields: [userId], references: [id])
   status      OrderStatus @default(PENDING)
-  totalAmount Decimal     @db.Decimal(20, 8)
+  totalAmount Decimal     @db.Decimal(20, 6)
   items       OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -69,11 +77,26 @@ model OrderItem {
   order           Order   @relation(fields: [orderId], references: [id])
   productId       String
   product         Product @relation(fields: [productId], references: [id])
-  displayQuantity Decimal @db.Decimal(20, 8)
+  displayQuantity Decimal @db.Decimal(20, 6)
   displayUnit     String
-  baseQuantity    Decimal @db.Decimal(20, 8)
-  unitPrice       Decimal @db.Decimal(20, 8)
-  subtotal        Decimal @db.Decimal(20, 8)
+  baseQuantity    Decimal @db.Decimal(20, 6)
+  unitPrice       Decimal @db.Decimal(20, 6)
+  subtotal        Decimal @db.Decimal(20, 6)
 
   @@map("app_order_items")
+}
+
+model SellerRequest {
+  id           String        @id @default(cuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  chemicalName String
+  description  String?
+  quantity     String?
+  unit         String?
+  status       RequestStatus @default(PENDING)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("app_seller_requests")
 }

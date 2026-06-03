@@ -6,6 +6,12 @@ import bcrypt from 'bcryptjs';
 import { redirect } from 'next/navigation';
 import { Role } from '@prisma/client';
 
+function getDashboardPath(role: string): string {
+  if (role === 'ADMIN') return '/admin';
+  if (role === 'SELLER') return '/seller';
+  return '/buyer';
+}
+
 export async function login(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -27,22 +33,17 @@ export async function login(formData: FormData) {
   const token = await signToken({
     userId: user.id,
     email: user.email,
-    role: user.role as 'ADMIN' | 'SELLER',
+    role: user.role as 'ADMIN' | 'SELLER' | 'BUYER',
   });
 
   await setAuthCookie(token);
-  
-  if (user.role === 'ADMIN') {
-    redirect('/admin');
-  } else {
-    redirect('/seller');
-  }
+  redirect(getDashboardPath(user.role));
 }
 
 export async function register(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const role = formData.get('role') as string || 'SELLER';
+  const role = formData.get('role') as string || 'BUYER';
 
   if (!email || !password) {
     return { error: 'Email and password are required' };
@@ -66,16 +67,11 @@ export async function register(formData: FormData) {
   const token = await signToken({
     userId: user.id,
     email: user.email,
-    role: user.role as 'ADMIN' | 'SELLER',
+    role: user.role as 'ADMIN' | 'SELLER' | 'BUYER',
   });
 
   await setAuthCookie(token);
-
-  if (user.role === 'ADMIN') {
-    redirect('/admin');
-  } else {
-    redirect('/seller');
-  }
+  redirect(getDashboardPath(user.role));
 }
 
 export async function logout() {

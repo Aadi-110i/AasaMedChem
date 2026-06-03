@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getAuth } from '@/lib/auth';
 import { logout } from '@/app/actions/auth';
-import { Microscope, LogOut, User as UserIcon, LayoutDashboard, Database } from 'lucide-react';
+import { Microscope, LogOut, User as UserIcon, LayoutDashboard, Database, ShoppingBag } from 'lucide-react';
 
 export default async function Navbar() {
   const auth = await getAuth();
@@ -28,13 +28,19 @@ export default async function Navbar() {
           {auth ? (
             <>
               <div className="hidden sm:flex items-center gap-2 mr-4">
-                {auth.role === 'ADMIN' ? (
+                {auth.role === 'ADMIN' && (
                   <Link href="/admin" className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-black uppercase tracking-widest rounded-lg transition-all">
                     <Database size={14} /> Admin Node
                   </Link>
-                ) : (
+                )}
+                {auth.role === 'SELLER' && (
                   <Link href="/seller" className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-black uppercase tracking-widest rounded-lg transition-all">
-                    <LayoutDashboard size={14} /> Ops Dashboard
+                    <LayoutDashboard size={14} /> Seller Hub
+                  </Link>
+                )}
+                {auth.role === 'BUYER' && (
+                  <Link href="/buyer" className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-black uppercase tracking-widest rounded-lg transition-all">
+                    <ShoppingBag size={14} /> Buyer Portal
                   </Link>
                 )}
               </div>
@@ -44,13 +50,13 @@ export default async function Navbar() {
                   <UserIcon size={16} />
                 </div>
                 <div className="hidden lg:block text-left">
-                  <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider leading-none mb-1">Authenticated</div>
+                  <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider leading-none mb-1">{auth.role}</div>
                   <div className="text-xs font-bold text-slate-900 leading-none">{auth.email}</div>
                 </div>
               </div>
               
               <form action={logout}>
-                <button type="submit" className="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Initialize Logout Protocol">
+                <button type="submit" className="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Logout">
                   <LogOut size={20} />
                 </button>
               </form>

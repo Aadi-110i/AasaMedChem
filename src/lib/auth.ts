@@ -8,7 +8,7 @@ const secret = new TextEncoder().encode(JWT_SECRET);
 export interface AuthPayload {
   userId: string;
   email: string;
-  role: 'ADMIN' | 'SELLER';
+  role: 'ADMIN' | 'SELLER' | 'BUYER';
 }
 
 export async function signToken(payload: AuthPayload) {
