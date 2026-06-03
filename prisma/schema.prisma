@@ -32,6 +32,8 @@ model User {
   orders       Order[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  @@map("app_users")
 }
 
 model Product {
@@ -44,6 +46,8 @@ model Product {
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@map("app_products")
 }
 
 model Order {
@@ -55,6 +59,8 @@ model Order {
   items       OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@map("app_orders")
 }
 
 model OrderItem {
@@ -68,4 +74,6 @@ model OrderItem {
   baseQuantity    Decimal @db.Decimal(20, 8)
   unitPrice       Decimal @db.Decimal(20, 8)
   subtotal        Decimal @db.Decimal(20, 8)
+
+  @@map("app_order_items")
 }

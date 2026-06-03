@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google';
+import { ToastProvider } from '@/components/Toast';
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -29,8 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${jakarta.variable} ${mono.variable}`}>
       <body>
-        <Navbar />
-        <main>{children}</main>
+        <ToastProvider>
+          <Navbar />
+          <main>{children}</main>
+        </ToastProvider>
       </body>
     </html>
   );

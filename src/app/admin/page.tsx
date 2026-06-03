@@ -1,7 +1,9 @@
 import { prisma } from '@/lib/prisma';
-import { createProduct, deleteProduct } from '@/app/actions/products';
 import { formatINR } from '@/lib/units';
-import { Database, Box, History, Trash2, PlusCircle, AlertCircle, TrendingUp, Users } from 'lucide-react';
+import { Database, Box, History, TrendingUp, Users, AlertCircle } from 'lucide-react';
+import AdminProductForm from '@/components/AdminProductForm';
+import DeleteProductButton from '@/components/DeleteProductButton';
+import OrderStatusBadge from '@/components/OrderStatusBadge';
 
 export default async function AdminDashboard() {
   const products = await prisma.product.findMany({
@@ -56,46 +58,7 @@ export default async function AdminDashboard() {
           {/* Left Column: Form */}
           <div className="xl:col-span-1">
             <div className="sticky top-28">
-              <div className="bg-slate-900 rounded-[32px] p-8 text-white shadow-2xl shadow-slate-200 overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-10 bg-blue-500 rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-8">
-                    <PlusCircle size={20} className="text-blue-400" />
-                    <h2 className="text-lg font-black uppercase tracking-widest">Initialize Entry</h2>
-                  </div>
-                  
-                  <form action={async (d) => { await createProduct(d); }} className="space-y-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Designation</label>
-                      <input type="text" name="name" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white placeholder:text-white/20" required placeholder="NACL_LAB_GRADE" />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Metric</label>
-                        <select name="baseUnit" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white appearance-none">
-                          <option value="GRAM">GRAM (g)</option>
-                          <option value="MILLILITER">ML (ml)</option>
-                          <option value="COUNT">ITEM (cnt)</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Rate (INR)</label>
-                        <input type="number" name="basePrice" step="0.00000001" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white" required placeholder="0.00" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Initial Load</label>
-                      <input type="number" name="stock" step="0.00000001" className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-blue-400 rounded-2xl outline-none transition-all font-bold text-white" required placeholder="0.00" />
-                    </div>
-
-                    <button type="submit" className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-900/20">
-                      Commit to Registry
-                    </button>
-                  </form>
-                </div>
-              </div>
+              <AdminProductForm />
             </div>
           </div>
 
@@ -132,14 +95,17 @@ export default async function AdminDashboard() {
                             <div className="text-[10px] font-bold text-slate-400 uppercase mt-1">Stock: {p.stock.toString()}</div>
                           </td>
                           <td className="px-8 py-6 text-right">
-                            <form action={async () => { await deleteProduct(p.id); }}>
-                              <button type="submit" className="p-2 text-slate-300 hover:text-red-500 transition-colors">
-                                <Trash2 size={18} />
-                              </button>
-                            </form>
+                            <DeleteProductButton productId={p.id} productName={p.name} />
                           </td>
                         </tr>
                       ))}
+                      {products.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="px-8 py-20 text-center">
+                            <div className="text-sm font-black text-slate-300 uppercase tracking-widest">No products in registry</div>
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -177,14 +143,17 @@ export default async function AdminDashboard() {
                             ))}
                           </td>
                           <td className="px-8 py-6">
-                            <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                              o.status === 'PENDING' ? 'bg-amber-50 text-amber-600' : 
-                              o.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-600' : 
-                              'bg-blue-50 text-blue-600'
-                            }`}>{o.status}</span>
+                            <OrderStatusBadge orderId={o.id} status={o.status} />
                           </td>
                         </tr>
                       ))}
+                      {orders.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="px-8 py-20 text-center">
+                            <div className="text-sm font-black text-slate-300 uppercase tracking-widest">No transactions detected</div>
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>

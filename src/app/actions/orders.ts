@@ -59,3 +59,23 @@ export async function placeOrder(productId: string, quantity: string, unit: Unit
     return { error: 'Failed to place order' };
   }
 }
+
+export async function updateOrderStatus(orderId: string, newStatus: 'PENDING' | 'APPROVED' | 'FULFILLED') {
+  const auth = await getAuth();
+  if (!auth || auth.role !== 'ADMIN') {
+    return { error: 'Unauthorized' };
+  }
+
+  try {
+    await prisma.order.update({
+      where: { id: orderId },
+      data: { status: newStatus },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/seller');
+    return { success: true };
+  } catch {
+    return { error: 'Failed to update order status' };
+  }
+}
